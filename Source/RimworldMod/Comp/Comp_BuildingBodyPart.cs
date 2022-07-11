@@ -38,18 +38,17 @@ namespace RimWorld
                 }
             }
             ((MapCompBuildingTracker)this.parent.Map.components.Where(t => t is MapCompBuildingTracker).FirstOrDefault()).Register(this);
-            foreach (IntVec3 c in GenAdjFast.AdjacentCells8Way(parent.Position))
+            List<IntVec3> adjSpaces = GenAdjFast.AdjacentCells8Way(parent.Position);
+            adjSpaces = adjSpaces.OrderBy(a => Rand.Range(0, 100)).ToList();
+            foreach (IntVec3 c in adjSpaces)
             {
                 foreach (Thing adj in c.GetThingList(parent.Map))
                 {
-                    if (adj is ThingWithComps)
+                    CompScaffold scaff = adj.TryGetComp<CompScaffold>();
+                    if (scaff != null)
                     {
-                        CompScaffold scaff = ((ThingWithComps)adj).TryGetComp<CompScaffold>();
-                        if (scaff != null)
-                        {
-                            AddScaff(scaff.parent);
-                            return;
-                        }
+                        AddScaff(scaff.parent);
+                        return;
                     }
                 }
             }
