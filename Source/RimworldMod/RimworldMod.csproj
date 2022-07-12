@@ -84,7 +84,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BuildingBody.cs" />
-    <Compile Include="Headdiff/IBuildingHeaddiff.cs" />
+    <Compile Include="Hediff/IBuildingHediff.cs" />
     <Compile Include="Comp/Comp_BuildingBodyPart.cs" />
     <Compile Include="Comp/CompProperties_BuildingBodyPart.cs" />
     <Compile Include="Comp/Comp_BuildingCore.cs" />

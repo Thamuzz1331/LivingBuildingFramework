@@ -15,7 +15,7 @@ namespace RimWorld
 
         public String bodyId = "NA";
         public BuildingBody body = null;
-        public List<IHeaddiff> headdiffs = new List<IHeaddiff>();
+        public List<IHediff> hediffs = new List<IHediff>();
 
         public void SetId(String _id)
         {
@@ -25,16 +25,16 @@ namespace RimWorld
         public override void PostExposeData()
         {
             Scribe_Values.Look<String>(ref bodyId, "bodyId", "NA");
-            Scribe_Collections.Look<IHeaddiff>(ref headdiffs, "headdiffs");
+            Scribe_Collections.Look<IHediff>(ref hediffs, "hediffs");
         }
 
         public override void PostSpawnSetup(bool respawningAfterLoad)
         {
             if(respawningAfterLoad)
             {
-                foreach (IHeaddiff headdiff in headdiffs)
+                foreach (IHediff hediff in hediffs)
                 {
-                    headdiff.Apply(this);
+                    hediff.Apply(this);
                 }
             }
             ((MapCompBuildingTracker)this.parent.Map.components.Where(t => t is MapCompBuildingTracker).FirstOrDefault()).Register(this);
@@ -91,5 +91,10 @@ namespace RimWorld
         {
             scaffolds.Clear();
         }
+        public virtual string GetSpecies()
+        {
+            return Props.species;
+        }
+
     }
 }

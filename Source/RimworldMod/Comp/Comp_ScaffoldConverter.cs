@@ -12,10 +12,11 @@ namespace RimWorld
 	{
 		protected CompProperties_ScaffoldConverter Props => (CompProperties_ScaffoldConverter)props;
 
+		public List<Thing> convertList = new List<Thing>();
 		public Queue<Thing> toConvert = new Queue<Thing>();
 
 		public string bodyId = null;
-		private BuildingBody body = null;
+		public BuildingBody body = null;
 
 		private int age;
 
@@ -42,10 +43,10 @@ namespace RimWorld
 
 		public override void PostSpawnSetup(bool respawningAfterLoad)
 		{
-			base.PostPostMake();
+			base.PostSpawnSetup(respawningAfterLoad);
 			if (respawningAfterLoad)
             {
-				((MapCompBuildingTracker)parent.Map.components.Where(t => t is MapCompBuildingTracker).FirstOrDefault()).Register(parent.TryGetComp<CompScaffoldConverter>());
+				((MapCompBuildingTracker)parent.Map.components.Where(t => t is MapCompBuildingTracker).FirstOrDefault()).Register(this);
 			}
 		}
 
@@ -60,7 +61,7 @@ namespace RimWorld
 			if (ticksToConversion <= 0)
 			{
 				ticksToConversion = conversionWaitLength;
-				ConvertHullTile();
+				ConvertScaffold();
 			}
 		}
 
@@ -104,7 +105,9 @@ namespace RimWorld
 					IntVec3 c = t.Position + (vec * j).ToIntVec3();
 					foreach (Thing adj in c.GetThingList(parent.Map))
 					{
-						if (adj.TryGetComp<CompScaffold>() != null && adj.TryGetComp<CompScaffold>().Props.species == body.GetSpecies())
+						if (adj.TryGetComp<CompScaffold>() != null && 
+							parent.TryGetComp<CompBuildingBodyPart>() != null && 
+							adj.TryGetComp<CompScaffold>().Props.species == parent.TryGetComp<CompBuildingBodyPart>().GetSpecies())
 						{
 							toConvert.Enqueue(adj);
 							cont = true;
@@ -114,7 +117,7 @@ namespace RimWorld
 			}
         }
 
-		public virtual void ConvertHullTile()
+		public virtual void ConvertScaffold()
 		{
 			if (toConvert.Count <= 0)
             {

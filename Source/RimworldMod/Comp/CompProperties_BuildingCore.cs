@@ -7,7 +7,7 @@ using Verse;
 
 namespace RimWorld
 {
-    public class CompProperties_BuildingCore : CompProperties
+    public class CompProperties_BuildingCore : CompProperties_BuildingBodyPart
     {
         public CompProperties_BuildingCore()
         {

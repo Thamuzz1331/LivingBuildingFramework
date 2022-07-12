@@ -13,13 +13,14 @@ namespace RimWorld
         public CompProperties_BuildingCore CoreProps => (CompProperties_BuildingCore)props;
         public string bodyName = null;
         public float hungerDuration = 0;
+        public float hungerThreshold = 300f;
 
         public Dictionary<string, float> stats = new Dictionary<string, float>();
 
         public override void PostExposeData()
         {
             Scribe_Values.Look<String>(ref bodyId, "bodyId", null);
-            Scribe_Values.Look<String>(ref bodyId, "bodyId", null);
+            Scribe_Values.Look<float>(ref hungerDuration, "hungerDuration", 300f);
         }
 
         public override void PostSpawnSetup(bool respawningAfterLoad)
@@ -31,14 +32,21 @@ namespace RimWorld
                 if (parent.TryGetComp<CompScaffoldConverter>() != null)
                 {
                     parent.TryGetComp<CompScaffoldConverter>().bodyId=bodyId;
-                    parent.TryGetComp<CompScaffoldConverter>().DetectionPulse();
-                    ((MapCompBuildingTracker)parent.Map.components.Where(t => t is MapCompBuildingTracker).FirstOrDefault()).Register(parent.TryGetComp<CompScaffoldConverter>());
                 }
             }
             ((MapCompBuildingTracker)parent.Map.components.Where(t => t is MapCompBuildingTracker).FirstOrDefault()).Register(this);
+            if (!respawningAfterLoad)
+            {
+                ((MapCompBuildingTracker)parent.Map.components.Where(t => t is MapCompBuildingTracker).FirstOrDefault()).Register(parent.TryGetComp<CompScaffoldConverter>());
+                parent.TryGetComp<CompScaffoldConverter>().DetectionPulse();
+            }
 
         }
 
+        public virtual void DoHunger()
+        {
+
+        }
         public virtual float GetStat(string stat)
         {
             return stats.TryGetValue(stat, 0f);

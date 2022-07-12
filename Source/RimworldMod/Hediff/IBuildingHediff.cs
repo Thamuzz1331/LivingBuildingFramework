@@ -8,10 +8,10 @@ using Verse.AI.Group;
 
 namespace RimWorld
 {
-    public interface IHeaddiff : IExposable
+    public interface IHediff : IExposable
     {
+        bool ShouldAddTo(CompBuildingBodyPart target);
         void Apply(CompBuildingBodyPart target);
-        bool RunOnBodyParts();
         void Remove(CompBuildingBodyPart target);
     }
 }

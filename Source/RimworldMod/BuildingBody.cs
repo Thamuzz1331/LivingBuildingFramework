@@ -29,7 +29,7 @@ namespace RimWorld
         {
             if (heart != null)
             {
-                return heart.Props.species;
+                return heart.GetSpecies();
             }
             return null;
         }
@@ -43,6 +43,13 @@ namespace RimWorld
             heart = _heart;
             heart.body = this;
         }
+
+        public virtual void Register(CompScaffoldConverter converter)
+        {
+            scaffoldConverter = converter;
+            converter.body = this;
+        }
+
 
         public virtual void Register(CompBuildingBodyPart comp)
         {
@@ -68,6 +75,11 @@ namespace RimWorld
                 currentNutrition += ((CompNutritionStore)comp).getCurrentNutrition();
             }
             comp.body = this;
+        }
+
+        public virtual void DeRegister(CompBuildingCore core)
+        {
+
         }
 
         public virtual void DeRegister(CompBuildingBodyPart comp)
@@ -144,9 +156,9 @@ namespace RimWorld
             {
                 return;
             }
-            if (heart.hungerDuration > 200)
+            if (heart.hungerDuration > heart.hungerThreshold)
             {
-
+                heart.DoHunger();
             }
             UpdatePassiveConsumption();
             UpdateNutritionGeneration();

@@ -31,7 +31,13 @@ namespace RimWorld
         }
         public void Register(CompScaffoldConverter converter)
         {
-
+            BuildingBody body = bodies.TryGetValue(converter.bodyId);
+            if (body == null)
+            {
+                body = new BuildingBody();
+                bodies.Add(converter.bodyId, body);
+            }
+            body.Register(converter);
         }
         public void Register(CompNutrition comp)
         {

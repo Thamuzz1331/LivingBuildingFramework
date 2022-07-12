@@ -35,16 +35,14 @@ namespace RimWorld
             }
         }
 
-		public virtual ThingDef GetConversionDef()
+		public virtual ThingDef GetConversionDef(CompScaffoldConverter converter)
         {
 			return ThingDef.Named(Props.transformString);
         }
 
-        public virtual Thing Convert(CompScaffoldConverter converter)
+        public virtual Thing MakeReplacement(ThingDef replacementDef, CompScaffoldConverter converter)
         {
-            ThingDef replacementDef = this.GetConversionDef();
-
-			Thing replacement = ThingMaker.MakeThing(replacementDef);
+            Thing replacement = ThingMaker.MakeThing(replacementDef);
 
 			CompBuildingBodyPart bodyPart = ((ThingWithComps)replacement).GetComp<CompBuildingBodyPart>();
 			if(bodyPart != null)
@@ -65,6 +63,16 @@ namespace RimWorld
 			parent.Destroy();
 			replacement.SpawnSetup(parent.Map, false);
             return replacement;
+        }
+
+        public virtual Thing Convert(CompScaffoldConverter converter)
+        {
+            ThingDef replacementDef = this.GetConversionDef(converter);
+            if (replacementDef != null)
+            {
+                return MakeReplacement(replacementDef, converter);
+            }
+            return null;
         }
     }
 }
