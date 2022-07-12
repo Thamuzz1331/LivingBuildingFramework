@@ -61,7 +61,7 @@ namespace RimWorld
 			TerrainDef terrain = parent.Map.terrainGrid.TerrainAt(c);
 			parent.Map.terrainGrid.RemoveTopLayer(c, false);
 			parent.Destroy();
-			replacement.SpawnSetup(parent.Map, false);
+			replacement.SpawnSetup(converter.parent.Map, false);
             return replacement;
         }
 

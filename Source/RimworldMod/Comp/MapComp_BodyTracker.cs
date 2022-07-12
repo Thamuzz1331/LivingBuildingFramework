@@ -19,6 +19,17 @@ namespace RimWorld
         {
         }
 
+        public void Register(CompBuildingCore core)
+        {
+            BuildingBody body = bodies.TryGetValue(core.bodyId);
+            if (body == null)
+            {
+                body = new BuildingBody();
+                bodies.Add(core.bodyId, body);
+            }
+            body.Register(core);
+        }
+
         public void Register(CompBuildingBodyPart comp)
         {
             BuildingBody body = bodies.TryGetValue(comp.bodyId);

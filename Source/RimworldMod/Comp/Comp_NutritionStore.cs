@@ -16,11 +16,11 @@ namespace RimWorld
 
         public override void PostSpawnSetup(bool respawningAfterLoad)
         {
-            base.PostSpawnSetup(respawningAfterLoad);
             if (!respawningAfterLoad)
             {
                 this.currentNutrition = Props.initialNutrition;
             }
+            base.PostSpawnSetup(respawningAfterLoad);
         }
 
         public virtual float getNutrientCapacity()

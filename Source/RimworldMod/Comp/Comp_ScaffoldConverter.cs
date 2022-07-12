@@ -139,7 +139,7 @@ namespace RimWorld
 							searching = false;
 						}
 					}
-					if(toReplace.TryGetComp<CompScaffold>() != null)
+					if (toReplace.TryGetComp<CompScaffold>() != null)
                     {
 						Thing replacement = toReplace.TryGetComp<CompScaffold>().Convert(this);
 						if (replacement != null)

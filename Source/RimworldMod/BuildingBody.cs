@@ -53,8 +53,15 @@ namespace RimWorld
 
         public virtual void Register(CompBuildingBodyPart comp)
         {
-            bodyParts.Add(comp.parent);
-            comp.body = this;
+            if (comp is CompBuildingCore)
+            {
+                heart = (CompBuildingCore)comp;
+                comp.body = this;
+            } else
+            {
+                bodyParts.Add(comp.parent);
+                comp.body = this;
+            }
         }
         public virtual void Register(CompNutrition comp)
         {
