@@ -38,17 +38,20 @@ namespace RimWorld
                 }
             }
             ((MapCompBuildingTracker)this.parent.Map.components.Where(t => t is MapCompBuildingTracker).FirstOrDefault()).Register(this);
-            List<IntVec3> adjSpaces = GenAdjFast.AdjacentCells8Way(parent.Position);
-            adjSpaces = adjSpaces.OrderBy(a => Rand.Range(0, 100)).ToList();
-            foreach (IntVec3 c in adjSpaces)
+            foreach (IntVec3 r in GenAdj.CellsOccupiedBy(parent))
             {
-                foreach (Thing adj in c.GetThingList(parent.Map))
+                List<IntVec3> adjSpaces = GenAdjFast.AdjacentCells8Way(r);
+                //adjSpaces = adjSpaces.OrderBy(a => Rand.Range(0, 100)).ToList();
+                foreach (IntVec3 c in adjSpaces)
                 {
-                    CompScaffold scaff = adj.TryGetComp<CompScaffold>();
-                    if (scaff != null)
+                    foreach (Thing adj in c.GetThingList(parent.Map))
                     {
-                        AddScaff(scaff.parent);
-                        return;
+                        CompScaffold scaff = adj.TryGetComp<CompScaffold>();
+                        if (scaff != null && scaff.GetSpecies() == this.GetSpecies())
+                        {
+                            AddScaff(adj);
+                            return;
+                        }
                     }
                 }
             }
@@ -63,11 +66,16 @@ namespace RimWorld
 
         public override string CompInspectStringExtra()
         {
+            StringBuilder b = new StringBuilder(base.CompInspectStringExtra());
             if (body != null && body.heart != null)
             {
-                return "Flesh of " + bodyId;
+                b.Append("Flesh of " + body.GetName());
             }
-            return "";
+            foreach(IHediff diff in hediffs)
+            {
+                b.Append("\nHediff " + diff.ToString());
+            }
+            return b.ToString();
         }
 
         public virtual void AddScaff(Thing scaff)
@@ -77,11 +85,13 @@ namespace RimWorld
                 CompScaffoldConverter converter = body.scaffoldConverter;
                 if (converter != null)
                 {
-                    converter.toConvert.Enqueue(scaff);
+                    converter.AddToConvert(scaff);
                     return;
                 }
+            } else
+            {
+                scaffolds.Add(scaff);
             }
-            scaffolds.Add(scaff);
         }
         public virtual List<Thing> GetScaff()
         {

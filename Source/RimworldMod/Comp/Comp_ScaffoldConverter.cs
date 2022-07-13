@@ -10,7 +10,9 @@ namespace RimWorld
 {
 	public class CompScaffoldConverter : ThingComp
 	{
-		protected CompProperties_ScaffoldConverter Props => (CompProperties_ScaffoldConverter)props;
+		public static HashSet<Thing> claimed = new HashSet<Thing>();
+
+		public CompProperties_ScaffoldConverter Props => (CompProperties_ScaffoldConverter)props;
 
 		public List<Thing> convertList = new List<Thing>();
 		public Queue<Thing> toConvert = new Queue<Thing>();
@@ -36,9 +38,13 @@ namespace RimWorld
 			Scribe_Values.Look(ref bodyId, "bodyId", "");
 			Scribe_Values.Look(ref age, "age", 0);
 			Scribe_Values.Look(ref ticksToConversion, "ticksToConversion", 0);
-			List<Thing> conversionList = toConvert.ToList<Thing>();
-			Scribe_Collections.Look<Thing>(ref conversionList, "conversionList", LookMode.Deep);
-			toConvert = new Queue<Thing>(conversionList);
+			convertList = toConvert.ToList();
+			Scribe_Collections.Look<Thing>(ref convertList, "convertList", LookMode.Reference);
+			toConvert = new Queue<Thing>(convertList);
+			foreach (Thing t in toConvert)
+			{
+				claimed.Add(t);
+			}
 		}
 
 		public override void PostSpawnSetup(bool respawningAfterLoad)
@@ -47,6 +53,14 @@ namespace RimWorld
 			if (respawningAfterLoad)
             {
 				((MapCompBuildingTracker)parent.Map.components.Where(t => t is MapCompBuildingTracker).FirstOrDefault()).Register(this);
+				foreach(Thing t in body.bodyParts)
+                {
+					foreach(Thing scaff in t.TryGetComp<CompBuildingBodyPart>().GetScaff())
+                    {
+						AddToConvert(scaff);
+					}
+					t.TryGetComp<CompBuildingBodyPart>().ClearScaff();
+				}
 			}
 		}
 
@@ -65,8 +79,30 @@ namespace RimWorld
 			}
 		}
 
+		public virtual void AddToConvert(Thing t)
+        {
+			if (claimed.Contains(t))
+            {
+				return;
+            }
+			toConvert.Enqueue(t);
+			claimed.Add(t);
+		}
+
 		public virtual void DetectionPulse()
 		{
+			foreach(IntVec3 c in GenAdj.CellsOccupiedBy(parent))
+            {
+				foreach (Thing adj in c.GetThingList(parent.Map))
+				{
+					if (adj.TryGetComp<CompScaffold>() != null &&
+						parent.TryGetComp<CompBuildingBodyPart>() != null &&
+						adj.TryGetComp<CompScaffold>().Props.species == parent.TryGetComp<CompBuildingBodyPart>().GetSpecies())
+					{
+						AddToConvert(adj);
+					}
+				}
+			}
 			int startSpots = Rand.Range(4, 6);
 			for (int s = 0; s < startSpots; s++)
             {
@@ -75,7 +111,7 @@ namespace RimWorld
 				{
 					if (t.TryGetComp<CompScaffold>() != null)
 					{
-						toConvert.Enqueue(t);
+						AddToConvert(t);
 						EnqueueSpur(t);
 					}
 				}
@@ -88,7 +124,23 @@ namespace RimWorld
             {
 				EnqueueSpur(t);
 			}
+			EnqueueSurrounding(t);
 		}
+
+		public virtual void EnqueueSurrounding(Thing t)
+        {
+			foreach(IntVec3 c in GenAdjFast.AdjacentCells8Way(t.Position))
+            {
+				foreach (Thing adj in c.GetThingList(parent.Map))
+				{
+					CompScaffold scaff = adj.TryGetComp<CompScaffold>();
+					if (scaff != null && scaff.GetSpecies() == body.GetSpecies())
+					{
+						AddToConvert(adj);
+					}
+				}
+			}
+        }
 
 		public virtual void EnqueueSpur(Thing t)
         {
@@ -109,7 +161,7 @@ namespace RimWorld
 							parent.TryGetComp<CompBuildingBodyPart>() != null && 
 							adj.TryGetComp<CompScaffold>().Props.species == parent.TryGetComp<CompBuildingBodyPart>().GetSpecies())
 						{
-							toConvert.Enqueue(adj);
+							AddToConvert(adj);
 							cont = true;
 						}
 					}
@@ -134,6 +186,7 @@ namespace RimWorld
 						if (toConvert.Count <= 0)
 							return;
 						toReplace = toConvert.Dequeue();
+						claimed.Remove(toReplace);
 						if (toReplace.TryGetComp<CompScaffold>() != null && !toReplace.Destroyed)
 						{
 							searching = false;
@@ -168,7 +221,6 @@ namespace RimWorld
             }
 			return ret;
         }
-
 	}
 	
 }

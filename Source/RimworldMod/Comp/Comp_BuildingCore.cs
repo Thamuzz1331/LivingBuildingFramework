@@ -16,6 +16,7 @@ namespace RimWorld
         public float hungerThreshold = 300f;
 
         public Dictionary<string, float> stats = new Dictionary<string, float>();
+        public Dictionary<string, float> multipliers = new Dictionary<string, float>();
 
         public override void PostExposeData()
         {
@@ -28,7 +29,8 @@ namespace RimWorld
             base.PostSpawnSetup(respawningAfterLoad);
             if (!respawningAfterLoad)
             {
-                bodyId = Guid.NewGuid().ToString();
+                if (bodyId == "NA")
+                    bodyId = Guid.NewGuid().ToString();
                 if (parent.TryGetComp<CompScaffoldConverter>() != null)
                 {
                     parent.TryGetComp<CompScaffoldConverter>().bodyId=bodyId;
@@ -53,7 +55,7 @@ namespace RimWorld
         }
         public virtual float GetMultiplier(string stat)
         {
-            return 1f;
+            return multipliers.TryGetValue(stat, 1f);
         }
     }
 }

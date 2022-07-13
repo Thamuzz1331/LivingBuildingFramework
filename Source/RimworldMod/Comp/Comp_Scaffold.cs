@@ -22,13 +22,10 @@ namespace RimWorld
                 {
                     foreach (Thing adj in c.GetThingList(parent.Map))
                     {
-                        if (adj is ThingWithComps)
+                        CompBuildingBodyPart flesh = adj.TryGetComp<CompBuildingBodyPart>();
+                        if (flesh != null && flesh.Props.species == this.Props.species)
                         {
-                            CompBuildingBodyPart flesh = ((ThingWithComps)adj).TryGetComp<CompBuildingBodyPart>();
-                            if (flesh != null && flesh.Props.species == this.Props.species)
-                            {
-                                flesh.AddScaff(parent);
-                            }
+                            flesh.AddScaff(parent);
                         }
                     }
                 }
@@ -73,6 +70,11 @@ namespace RimWorld
                 return MakeReplacement(replacementDef, converter);
             }
             return null;
+        }
+
+        public virtual string GetSpecies()
+        {
+            return this.Props.species;
         }
     }
 }

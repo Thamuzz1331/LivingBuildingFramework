@@ -33,6 +33,21 @@ namespace RimWorld
             }
             return null;
         }
+        public virtual string GetName()
+        {
+            if (heart != null)
+            {
+                if (heart.bodyName != null)
+                {
+                    return heart.bodyName;
+                } else
+                {
+                    return heart.bodyId;
+                }
+            }
+            return "NA";
+        }
+
         public virtual float GetConversionNutritionCost()
         {
             return 15f;
