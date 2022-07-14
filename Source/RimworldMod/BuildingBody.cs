@@ -50,6 +50,10 @@ namespace RimWorld
 
         public virtual float GetConversionNutritionCost()
         {
+            if (heart != null)
+            {
+                heart.GetStat("conversionCost");
+            }
             return 15f;
         }
 

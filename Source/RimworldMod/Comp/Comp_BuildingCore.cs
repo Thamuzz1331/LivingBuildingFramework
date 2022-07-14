@@ -15,11 +15,14 @@ namespace RimWorld
         public float hungerDuration = 0;
         public float hungerThreshold = 300f;
 
-        public Dictionary<string, float> stats = new Dictionary<string, float>();
+        public Dictionary<string, float> stats = new Dictionary<string, float>() {
+            {"conversionCost": 15f}
+        };
         public Dictionary<string, float> multipliers = new Dictionary<string, float>();
 
         public override void PostExposeData()
         {
+            base.PostExposeData();
             Scribe_Values.Look<String>(ref bodyId, "bodyId", null);
             Scribe_Values.Look<float>(ref hungerDuration, "hungerDuration", 300f);
         }
@@ -53,9 +56,9 @@ namespace RimWorld
         {
             return stats.TryGetValue(stat, 0f);
         }
-        public virtual float GetMultiplier(string stat)
+        public virtual float GetMultiplier(string mult)
         {
-            return multipliers.TryGetValue(stat, 1f);
+            return multipliers.TryGetValue(mult, 1f);
         }
     }
 }

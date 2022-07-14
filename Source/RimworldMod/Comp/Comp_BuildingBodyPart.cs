@@ -24,8 +24,9 @@ namespace RimWorld
 
         public override void PostExposeData()
         {
+            base.PostExposeData();
             Scribe_Values.Look<String>(ref bodyId, "bodyId", "NA");
-            Scribe_Collections.Look<IHediff>(ref hediffs, "hediffs");
+            Scribe_Collections.Look<IHediff>(ref hediffs, "hediffs", LookMode.Deep);
         }
 
         public override void PostSpawnSetup(bool respawningAfterLoad)

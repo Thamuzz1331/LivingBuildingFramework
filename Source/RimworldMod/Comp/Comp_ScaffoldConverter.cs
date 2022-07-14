@@ -64,6 +64,12 @@ namespace RimWorld
 			}
 		}
 
+		public override void PostDeSpawn(Map map)
+        {
+			base.PostDeSpawn(map);
+//			foreach()
+		}
+
 		public override void CompTick()
 		{
 			if (!parent.Spawned || body == null)
@@ -178,7 +184,7 @@ namespace RimWorld
 			int numSpawn = GetNum();
 			for (int i = 0; i < numSpawn; i++)
 			{
-				if (body.RequestNutrition(body.GetConversionNutritionCost())) { 
+				if (body.RequestNutrition(body.GetConversionNutritionCost())) {
 					Thing toReplace = null;
 					bool searching = true;
 					while (searching)
