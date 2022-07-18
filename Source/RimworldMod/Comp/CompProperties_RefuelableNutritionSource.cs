@@ -6,7 +6,7 @@ using Verse;
 
 namespace RimWorld
 {
-    public class CompProperties_RefuelableNutritionSource : CompProperties
+    public class CompProperties_RefuelableNutritionSource : CompProperties_NutritionSource
     {
         public CompProperties_RefuelableNutritionSource()
         {

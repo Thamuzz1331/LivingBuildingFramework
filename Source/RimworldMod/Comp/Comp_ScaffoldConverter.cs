@@ -43,7 +43,7 @@ namespace RimWorld
 			toConvert = new Queue<Thing>(convertList);
 			foreach (Thing t in toConvert)
 			{
-				claimed.Add(t);
+				//claimed.Add(t);
 			}
 		}
 
@@ -67,7 +67,6 @@ namespace RimWorld
 		public override void PostDeSpawn(Map map)
         {
 			base.PostDeSpawn(map);
-//			foreach()
 		}
 
 		public override void CompTick()
@@ -87,12 +86,12 @@ namespace RimWorld
 
 		public virtual void AddToConvert(Thing t)
         {
-			if (claimed.Contains(t))
-            {
-				return;
-            }
+//			if (claimed.Contains(t))
+//            {
+//				return;
+//            }
 			toConvert.Enqueue(t);
-			claimed.Add(t);
+//			claimed.Add(t);
 		}
 
 		public virtual void DetectionPulse()

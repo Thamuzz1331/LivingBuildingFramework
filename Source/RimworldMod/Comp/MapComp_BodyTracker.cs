@@ -67,7 +67,7 @@ namespace RimWorld
             if (curTick % 120 == 0) { 
                 foreach (string b in bodies.Keys)
                 {
-                    bodies.TryGetValue(b).RunNutrition();
+                    bodies.TryGetValue(b).RunNutrition(120f);
                 }
             }
             curTick++;

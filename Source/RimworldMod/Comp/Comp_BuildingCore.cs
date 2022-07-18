@@ -11,12 +11,12 @@ namespace RimWorld
     public class CompBuildingCore : CompBuildingBodyPart
     {
         public CompProperties_BuildingCore CoreProps => (CompProperties_BuildingCore)props;
-        public string bodyName = null;
+        public string bodyName = "nameless thing";
         public float hungerDuration = 0;
         public float hungerThreshold = 300f;
 
         public Dictionary<string, float> stats = new Dictionary<string, float>() {
-            {"conversionCost": 15f}
+            {"conversionCost", 15f}
         };
         public Dictionary<string, float> multipliers = new Dictionary<string, float>();
 
@@ -45,6 +45,31 @@ namespace RimWorld
                 ((MapCompBuildingTracker)parent.Map.components.Where(t => t is MapCompBuildingTracker).FirstOrDefault()).Register(parent.TryGetComp<CompScaffoldConverter>());
                 parent.TryGetComp<CompScaffoldConverter>().DetectionPulse();
             }
+
+        }
+
+        public override IEnumerable<Gizmo> CompGetGizmosExtra()
+        {
+            foreach (Gizmo gizmo in base.CompGetGizmosExtra())
+            {
+                yield return gizmo;
+            }
+            if ((int)parent.GetStatValue(inducers) > 0)
+            {
+                yield return new Command_Action
+                {
+                    defaultLabel = "Set Body Name",
+                    action = delegate ()
+                    {
+                        this.SetName();
+                    }
+                };
+            }
+
+        }
+
+        public virtual void SetName()
+        {
 
         }
 

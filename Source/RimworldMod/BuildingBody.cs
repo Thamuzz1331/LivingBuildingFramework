@@ -176,7 +176,7 @@ namespace RimWorld
             return true;
         }
 
-        public virtual void RunNutrition()
+        public virtual void RunNutrition(float ticks)
         {
             if (heart == null)
             {
@@ -214,20 +214,15 @@ namespace RimWorld
             }
             if (net < 0)
             {
-                float deficit = 0;
                 net = net * -1;
                 if (net > currentNutrition)
                 {
-                    deficit = net - currentNutrition;
                     currentNutrition = 0;
                     foreach (CompNutritionStore store in stores)
                     {
                         store.currentNutrition = 0;
                     }
-                    if (deficit > 0 && bodyParts.Count > 0)
-                    {
-                        heart.hungerDuration++;
-                    } 
+                    heart.hungerDuration += ticks;
                 }
                 else
                 {
