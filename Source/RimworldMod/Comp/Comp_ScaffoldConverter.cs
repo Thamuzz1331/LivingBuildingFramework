@@ -22,10 +22,23 @@ namespace RimWorld
 
 		private int age;
 
-		public float conversionWaitLength = 45f;
 		public virtual float GetConversionWaitLength()
         {
-			return conversionWaitLength;
+			float cInterval = Props.conversionInterval;
+			if (body != null && body.heart != null)
+            {
+				cInterval = cInterval / (body.heart.GetStat("growthSpeed"));
+            }
+			return cInterval;
+        }
+		public virtual float GetConversionCost()
+        {
+			float cost = Props.conversionCost;
+			if (body != null && body.heart != null)
+            {
+				cost = cost / (body.heart.GetStat("growthEfficiency"));
+            }
+			return cost;
         }
 
 		private float ticksToConversion;
@@ -79,7 +92,7 @@ namespace RimWorld
 			ticksToConversion--;
 			if (ticksToConversion <= 0)
 			{
-				ticksToConversion = conversionWaitLength;
+				ticksToConversion = GetConversionWaitLength();
 				ConvertScaffold();
 			}
 		}
@@ -96,6 +109,7 @@ namespace RimWorld
 
 		public virtual void DetectionPulse()
 		{
+			List<Thing> initialScaffolds = new List<Thing>();
 			foreach(IntVec3 c in GenAdj.CellsOccupiedBy(parent))
             {
 				foreach (Thing adj in c.GetThingList(parent.Map))
@@ -104,14 +118,26 @@ namespace RimWorld
 						parent.TryGetComp<CompBuildingBodyPart>() != null &&
 						adj.TryGetComp<CompScaffold>().Props.species == parent.TryGetComp<CompBuildingBodyPart>().GetSpecies())
 					{
-						AddToConvert(adj);
+						initialScaffolds.Add(adj);
 					}
 				}
 			}
+			foreach(Thing toReplace in initialScaffolds)
+            {
+				if (toReplace.TryGetComp<CompScaffold>() != null)
+                {
+					Thing replacement = toReplace.TryGetComp<CompScaffold>().Convert(this);
+					if (replacement != null)
+                    {
+						RandEnqueue(replacement);
+					}
+				}
+            }
+			/*
 			int startSpots = Rand.Range(4, 6);
 			for (int s = 0; s < startSpots; s++)
             {
-				IntVec3 c = parent.Position + (Rand.InsideUnitCircleVec3 * 3).ToIntVec3();
+				IntVec3 c = parent.Position + (Rand.InsideUnitCircleVec3 * parent.).ToIntVec3();
 				foreach (Thing t in c.GetThingList(parent.Map))
 				{
 					if (t.TryGetComp<CompScaffold>() != null)
@@ -121,6 +147,7 @@ namespace RimWorld
 					}
 				}
 			}
+			*/
 		}
 
 		public virtual void RandEnqueue(Thing t)
@@ -174,22 +201,23 @@ namespace RimWorld
 			}
         }
 
-		public virtual void ConvertScaffold()
+		public virtual List<Thing> ConvertScaffold()
 		{
+			List<Thing> ret = new List<Thing>();
 			if (toConvert.Count <= 0)
             {
-				return;
+				return ret;
             }
 			int numSpawn = GetNum();
 			for (int i = 0; i < numSpawn; i++)
 			{
-				if (body.RequestNutrition(body.GetConversionNutritionCost())) {
+				if (body.RequestNutrition(GetConversionCost())) {
 					Thing toReplace = null;
 					bool searching = true;
 					while (searching)
 					{
 						if (toConvert.Count <= 0)
-							return;
+							return ret;
 						toReplace = toConvert.Dequeue();
 						claimed.Remove(toReplace);
 						if (toReplace.TryGetComp<CompScaffold>() != null && !toReplace.Destroyed)
@@ -202,12 +230,13 @@ namespace RimWorld
 						Thing replacement = toReplace.TryGetComp<CompScaffold>().Convert(this);
 						if (replacement != null)
                         {
+							ret.Add(replacement);
 							RandEnqueue(replacement);
 						}
 					}
 				}	
 			}
-
+			return ret;
 		}
 
 		//This is terrible, replace.

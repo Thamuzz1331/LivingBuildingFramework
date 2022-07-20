@@ -7,8 +7,11 @@ using Verse;
 
 namespace RimWorld
 {
-   public class CompProperties_ScaffoldConverter : CompProperties
+    public class CompProperties_ScaffoldConverter : CompProperties
     {
+        public float conversionCost = 0.75f;
+        public float conversionInterval = 45f;
+
         public CompProperties_ScaffoldConverter()
         {
             compClass = typeof(CompScaffoldConverter);

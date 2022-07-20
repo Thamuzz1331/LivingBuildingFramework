@@ -16,7 +16,10 @@ namespace RimWorld
         public float hungerThreshold = 300f;
 
         public Dictionary<string, float> stats = new Dictionary<string, float>() {
-            {"conversionCost", 15f}
+            {"metabolicEfficiency", 1f},
+            {"metabolicSpeed", 1f},
+            {"growthEfficiency", 1f},
+            {"growthSpeed", 1f},
         };
         public Dictionary<string, float> multipliers = new Dictionary<string, float>();
 
@@ -54,18 +57,6 @@ namespace RimWorld
             {
                 yield return gizmo;
             }
-            if ((int)parent.GetStatValue(inducers) > 0)
-            {
-                yield return new Command_Action
-                {
-                    defaultLabel = "Set Body Name",
-                    action = delegate ()
-                    {
-                        this.SetName();
-                    }
-                };
-            }
-
         }
 
         public virtual void SetName()
@@ -79,7 +70,15 @@ namespace RimWorld
         }
         public virtual float GetStat(string stat)
         {
-            return stats.TryGetValue(stat, 0f);
+            switch (stat)
+            {
+                case "growthEfficiency":
+                    return stats.TryGetValue(stat, 1f) * stats.TryGetValue("metabolicEfficiency", 1f);
+                case "growthSpeed":
+                    return stats.TryGetValue(stat, 1f) * stats.TryGetValue("metabolicSpeed", 1f);
+                default:
+                    return stats.TryGetValue(stat, 1f);
+            }
         }
         public virtual float GetMultiplier(string mult)
         {

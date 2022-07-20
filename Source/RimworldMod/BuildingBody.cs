@@ -48,15 +48,6 @@ namespace RimWorld
             return "NA";
         }
 
-        public virtual float GetConversionNutritionCost()
-        {
-            if (heart != null)
-            {
-                heart.GetStat("conversionCost");
-            }
-            return 15f;
-        }
-
         public virtual void Register(CompBuildingCore _heart)
         {
             heart = _heart;
@@ -158,7 +149,7 @@ namespace RimWorld
         }
         public virtual void UpdatePassiveConsumption()
         {
-            passiveConsumption = 1*bodyParts.Count + 150;
+            passiveConsumption = 0.05f*(bodyParts.Count + 150);
             foreach (CompNutritionConsumer c in consumers)
             {
                 passiveConsumption += c.getConsumptionPerPulse();
@@ -190,7 +181,7 @@ namespace RimWorld
             UpdateNutritionGeneration();
             UpdateCurrentNutrition();
             float net = nutritionGen - passiveConsumption - tempHunger;
-            net = net / (60000f/120f);
+            net = net / (60000f/ticks);
             if (net > 0)
             {
                 float toStore = net * 0.5f;
