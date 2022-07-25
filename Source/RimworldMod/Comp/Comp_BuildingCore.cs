@@ -32,7 +32,6 @@ namespace RimWorld
 
         public override void PostSpawnSetup(bool respawningAfterLoad)
         {
-            base.PostSpawnSetup(respawningAfterLoad);
             if (!respawningAfterLoad)
             {
                 if (bodyId == "NA")
@@ -42,7 +41,7 @@ namespace RimWorld
                     parent.TryGetComp<CompScaffoldConverter>().bodyId=bodyId;
                 }
             }
-            ((MapCompBuildingTracker)parent.Map.components.Where(t => t is MapCompBuildingTracker).FirstOrDefault()).Register(this);
+            base.PostSpawnSetup(respawningAfterLoad);
             if (!respawningAfterLoad)
             {
                 ((MapCompBuildingTracker)parent.Map.components.Where(t => t is MapCompBuildingTracker).FirstOrDefault()).Register(parent.TryGetComp<CompScaffoldConverter>());

@@ -94,12 +94,6 @@ namespace RimWorld
             comp.body = this;
         }
 
-        public virtual void DeRegister(CompBuildingCore core)
-        {
-            bodyParts.Remove(core.parent);
-            core.body = null;
-        }
-
         public virtual void DeRegister(CompBuildingBodyPart comp)
         {
             bodyParts.Remove(comp.parent);
