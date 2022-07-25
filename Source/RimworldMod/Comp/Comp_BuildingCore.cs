@@ -51,6 +51,17 @@ namespace RimWorld
 
         }
 
+        public override void CompTick()
+        {
+            base.CompTick();
+
+        }
+
+        public override void PostDeSpawn(Map map)
+        {
+            base.PostDeSpawn(map);
+        }
+
         public override IEnumerable<Gizmo> CompGetGizmosExtra()
         {
             foreach (Gizmo gizmo in base.CompGetGizmosExtra())
