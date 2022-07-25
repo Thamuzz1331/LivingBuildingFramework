@@ -133,19 +133,13 @@ namespace RimWorld
                 nutritionGen += c.getNutritionPerPulse();
             }
         }
-        public void UpdateNutritionCapacity()
-        {
-            nutritionCapacity = 0;
-            foreach (CompNutritionStore c in stores)
-            {
-                nutritionCapacity += c.getNutrientCapacity();
-            }
-        }
         public virtual void UpdateCurrentNutrition()
         {
+            nutritionCapacity = 0;
             currentNutrition = 0;
             foreach (CompNutritionStore c in stores)
             {
+                nutritionCapacity += c.getNutrientCapacity();
                 currentNutrition += c.getCurrentNutrition();
             }
         }
