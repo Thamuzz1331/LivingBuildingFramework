@@ -70,28 +70,22 @@ namespace RimWorld
 	        }
 	        if (Prefs.DevMode)
 	        {
-		        if ((this.getNutrientCapacity() - this.getCurrentNutrition()) > 0f)
-		        {
-			        yield return new Command_Action
-			        {
-				        defaultLabel = "DEBUG: Fill",
-				        action = delegate()
-				        {
-					        this.currentNutrition = this.getNutrientCapacity();
-				        }
-			        };
-		        }
-		        if (this.currentNutrition > 0f)
-		        {
-			        yield return new Command_Action
-			        {
-				        defaultLabel = "DEBUG: Empty",
-				        action = delegate()
-				        {
-                            this.currentNutrition = 0f;
-				        }
-			        };
-		        }
+			    yield return new Command_Action
+			    {
+				    defaultLabel = "DEBUG: Fill",
+				    action = delegate()
+				    {
+					    this.currentNutrition = this.getNutrientCapacity();
+				    }
+			    };
+			    yield return new Command_Action
+			    {
+				    defaultLabel = "DEBUG: Empty",
+				    action = delegate()
+				    {
+                        this.currentNutrition = 0f;
+				    }
+			    };
 	        }
         }
     }
