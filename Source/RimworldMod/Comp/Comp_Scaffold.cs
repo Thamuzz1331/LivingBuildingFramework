@@ -40,7 +40,6 @@ namespace RimWorld
         public virtual Thing MakeReplacement(ThingDef replacementDef, CompScaffoldConverter converter)
         {
             Thing replacement = ThingMaker.MakeThing(replacementDef);
-
 			CompBuildingBodyPart bodyPart = ((ThingWithComps)replacement).GetComp<CompBuildingBodyPart>();
 			if(bodyPart != null)
 			{
@@ -54,9 +53,6 @@ namespace RimWorld
 			replacement.Rotation = parent.Rotation;
 			replacement.Position = parent.Position;
 			replacement.SetFaction(Faction.OfPlayer);
-            IntVec3 c = parent.Position;
-			TerrainDef terrain = parent.Map.terrainGrid.TerrainAt(c);
-			parent.Map.terrainGrid.RemoveTopLayer(c, false);
 			parent.Destroy();
 			replacement.SpawnSetup(converter.parent.Map, false);
             return replacement;

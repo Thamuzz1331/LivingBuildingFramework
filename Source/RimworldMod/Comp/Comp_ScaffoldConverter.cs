@@ -99,12 +99,7 @@ namespace RimWorld
 
 		public virtual void AddToConvert(Thing t)
         {
-//			if (claimed.Contains(t))
-//            {
-//				return;
-//            }
 			toConvert.Enqueue(t);
-//			claimed.Add(t);
 		}
 
 		public virtual void DetectionPulse()
@@ -133,21 +128,6 @@ namespace RimWorld
 					}
 				}
             }
-			/*
-			int startSpots = Rand.Range(4, 6);
-			for (int s = 0; s < startSpots; s++)
-            {
-				IntVec3 c = parent.Position + (Rand.InsideUnitCircleVec3 * parent.).ToIntVec3();
-				foreach (Thing t in c.GetThingList(parent.Map))
-				{
-					if (t.TryGetComp<CompScaffold>() != null)
-					{
-						AddToConvert(t);
-						EnqueueSpur(t);
-					}
-				}
-			}
-			*/
 		}
 
 		public virtual void RandEnqueue(Thing t)
@@ -254,6 +234,11 @@ namespace RimWorld
 				ret = 1;
             }
 			return ret;
+        }
+
+		public virtual List<TerrainDef> GetTerrains()
+        {
+			return new List<TerrainDef>();
         }
 	}
 	
