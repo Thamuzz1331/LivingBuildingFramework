@@ -97,7 +97,7 @@ namespace RimWorld
         public virtual void DeRegister(CompBuildingBodyPart comp)
         {
             bodyParts.Remove(comp.parent);
-            comp.body = null;
+            //comp.body = null;
         }
         public virtual void DeRegister(CompNutrition comp)
         {
