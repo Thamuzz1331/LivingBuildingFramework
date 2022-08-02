@@ -40,7 +40,7 @@ namespace RimWorld
         {
             if (body != null)
             {
-                return "Nutrition " + body.nutritionGen + "/" + body.passiveConsumption + "/" + body.tempHunger + "\n" + 
+                return "Nutrition " + body.nutritionGen + "/" + body.passiveConsumption + "\n" + 
                     body.currentNutrition + "/" + body.nutritionCapacity;
             }
             return "";

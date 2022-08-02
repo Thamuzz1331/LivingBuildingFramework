@@ -6,6 +6,7 @@ using Verse;
 using RimWorld.Planet;
 using UnityEngine;
 using Verse.AI.Group;
+using LivingBuilding;
 
 namespace RimWorld
 {
@@ -26,6 +27,7 @@ namespace RimWorld
             {
                 body = new BuildingBody();
                 bodies.Add(core.bodyId, body);
+                BodyOverlayHandler.bodies.Add(body);
             }
             body.Register(core);
         }
@@ -37,9 +39,11 @@ namespace RimWorld
             {
                 body = new BuildingBody();
                 bodies.Add(comp.bodyId, body);
+                BodyOverlayHandler.bodies.Add(body);
             }
             body.Register(comp);
         }
+
         public void Register(CompScaffoldConverter converter)
         {
             BuildingBody body = bodies.TryGetValue(converter.bodyId);
@@ -47,9 +51,11 @@ namespace RimWorld
             {
                 body = new BuildingBody();
                 bodies.Add(converter.bodyId, body);
+                BodyOverlayHandler.bodies.Add(body);
             }
             body.Register(converter);
         }
+
         public void Register(CompNutrition comp)
         {
             BuildingBody body = bodies.TryGetValue(comp.bodyId);
@@ -57,6 +63,7 @@ namespace RimWorld
             {
                 body = new BuildingBody();
                 bodies.Add(comp.bodyId, body);
+                BodyOverlayHandler.bodies.Add(body);
             }
             body.Register(comp);
         }

@@ -6,6 +6,7 @@ using Verse;
 using RimWorld.Planet;
 using UnityEngine;
 using Verse.AI.Group;
+using LivingBuilding;
 
 namespace RimWorld
 {
@@ -23,7 +24,21 @@ namespace RimWorld
         public float nutritionCapacity = 0;
         public float passiveConsumption = 0;
         public float nutritionGen = 0;
-        public float tempHunger = 0;
+
+        public LivingBuilding.BodyOverlayDrawer Drawer
+		{
+			get
+			{
+				if (this.drawer == null)
+				{
+					Map currentMap = Find.CurrentMap;
+                    Color bodyColor = new Color(Rand.Value, Rand.Value, Rand.Value);
+					this.drawer = new BodyOverlayDrawer(this, bodyColor);
+				}
+				return this.drawer;
+			}
+		}
+        private BodyOverlayDrawer drawer;
 
         public virtual string GetSpecies()
         {
@@ -72,6 +87,7 @@ namespace RimWorld
                 bodyParts.Add(comp.parent);
                 comp.body = this;
             }
+            this.Drawer.SetDirty();
         }
         public virtual void Register(CompNutrition comp)
         {
@@ -97,6 +113,7 @@ namespace RimWorld
         public virtual void DeRegister(CompBuildingBodyPart comp)
         {
             bodyParts.Remove(comp.parent);
+            drawer.SetDirty();
             //comp.body = null;
         }
         public virtual void DeRegister(CompNutrition comp)
@@ -167,10 +184,10 @@ namespace RimWorld
             {
                 heart.DoHunger();
             }
+            UpdateCurrentNutrition();
             UpdatePassiveConsumption();
             UpdateNutritionGeneration();
-            UpdateCurrentNutrition();
-            float net = nutritionGen - passiveConsumption - tempHunger;
+            float net = nutritionGen - passiveConsumption;
             net = net / (60000f/ticks);
             if (net > 0)
             {
@@ -196,8 +213,9 @@ namespace RimWorld
             if (net < 0)
             {
                 net = net * -1;
-                if (net > currentNutrition)
+                if (net > this.currentNutrition)
                 {
+//                    Log.Message(net + " " + this.currentNutrition);
                     currentNutrition = 0;
                     foreach (CompNutritionStore store in stores)
                     {
@@ -210,7 +228,6 @@ namespace RimWorld
                     ExtractNutrition(stores, net, 0);
                 }
             }
-            tempHunger = 0;
         }
 
         public virtual float StoreNutrition(HashSet<CompNutritionStore> _stores, float toStore, int depth)
