@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>	
+	<BodyToggleTooltip>Toggle body overlay.</BodyToggleTooltip>
+	<BodyOpacitySetting>Opacity of the body overlay (Require restart)</BodyOpacitySetting>
+	<BodyOverlayUpdateTicks>Overlay update interval</BodyOverlayUpdateTicks>
+	<ResetBodySettings>Reset</ResetBodySettings>
+</LanguageData>
