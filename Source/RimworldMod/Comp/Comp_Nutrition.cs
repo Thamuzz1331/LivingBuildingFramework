@@ -40,8 +40,7 @@ namespace RimWorld
         {
             if (body != null)
             {
-                return "Nutrition " + body.nutritionGen + "/" + body.passiveConsumption + "\n" + 
-                    body.currentNutrition + "/" + body.nutritionCapacity;
+                return String.Format("Nutrition {0:0.##}/{1:0.##}\n{2:0.##}/{3:0.##}", body.nutritionGen, body.passiveConsumption, body.currentNutrition, body.nutritionCapacity);
             }
             return "";
         }

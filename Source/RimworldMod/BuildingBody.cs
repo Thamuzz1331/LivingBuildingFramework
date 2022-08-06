@@ -170,7 +170,6 @@ namespace RimWorld
             }
 
             ExtractNutrition(stores, qty, 0);
-            currentNutrition -= qty;
             return true;
         }
 
