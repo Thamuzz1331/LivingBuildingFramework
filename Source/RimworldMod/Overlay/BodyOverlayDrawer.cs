@@ -127,8 +127,6 @@ namespace LivingBuilding
 			}
 		}
 
-		private bool wantDraw;
-
 		private Material material;
 
 		private bool materialCaresAboutVertexColors;
