@@ -54,10 +54,6 @@ namespace RimWorld
 			convertList = toConvert.ToList();
 			Scribe_Collections.Look<Thing>(ref convertList, "convertList", LookMode.Reference);
 			toConvert = new Queue<Thing>(convertList);
-			foreach (Thing t in toConvert)
-			{
-				//claimed.Add(t);
-			}
 		}
 
 		public override void PostSpawnSetup(bool respawningAfterLoad)

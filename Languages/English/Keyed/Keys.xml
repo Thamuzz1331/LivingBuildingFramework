@@ -4,4 +4,9 @@
 	<BodyOpacitySetting>Opacity of the body overlay (Require restart)</BodyOpacitySetting>
 	<BodyOverlayUpdateTicks>Overlay update interval</BodyOverlayUpdateTicks>
 	<ResetBodySettings>Reset</ResetBodySettings>
+	<LivingBuildings.TabStats>Stats</LivingBuildings.TabStats>
+	<metabolicEfficiency>Metabolic Efficiency</metabolicEfficiency>
+	<metabolicSpeed>Metabolic Speed</metabolicSpeed>
+	<growthEfficiency>Growth Efficiency</growthEfficiency>
+	<growthSpeed>Growth Speed</growthSpeed>
 </LanguageData>

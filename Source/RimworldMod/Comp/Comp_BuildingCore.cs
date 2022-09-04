@@ -83,9 +83,9 @@ namespace RimWorld
             switch (stat)
             {
                 case "growthEfficiency":
-                    return stats.TryGetValue(stat, 1f) * stats.TryGetValue("metabolicEfficiency", 1f);
+                    return stats.TryGetValue(stat, 1f) * GetStat("metabolicEfficiency");
                 case "growthSpeed":
-                    return stats.TryGetValue(stat, 1f) * stats.TryGetValue("metabolicSpeed", 1f);
+                    return stats.TryGetValue(stat, 1f) * GetStat("metabolicSpeed");
                 default:
                     return stats.TryGetValue(stat, 1f);
             }
