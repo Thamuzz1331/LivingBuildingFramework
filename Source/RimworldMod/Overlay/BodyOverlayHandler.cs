@@ -10,7 +10,7 @@ namespace LivingBuilding
 	[StaticConstructorOnStartup]
 	internal class BodyOverlayHandler
 	{
-		public static HashSet<BuildingBody> bodies = new HashSet<BuildingBody>();
+		public static HashSet<MapCompBuildingTracker> bodiesHandlers = new HashSet<MapCompBuildingTracker>();
 
 		public static BodyOverlayHandler Instance
 		{
@@ -28,7 +28,20 @@ namespace LivingBuilding
 		{
 			if (this.bodyOverlayToggle)
 			{
-				foreach(BuildingBody body in bodies)
+				Map curMap = Find.CurrentMap;
+				MapCompBuildingTracker curTracker = null;
+				foreach(MapCompBuildingTracker tracker in bodiesHandlers)
+                {
+					if (tracker.map == curMap)
+                    {
+						curTracker = tracker;
+                    }
+                }
+				if (curTracker == null)
+                {
+					return;
+                }
+				foreach(BuildingBody body in curTracker.bodies.Values)
                 {
 					body.Drawer.CellBoolDrawerUpdate();
 				}

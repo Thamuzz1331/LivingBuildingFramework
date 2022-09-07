@@ -18,6 +18,13 @@ namespace RimWorld
 
         public MapCompBuildingTracker(Map map) : base(map)
         {
+            BodyOverlayHandler.bodiesHandlers.Add(this);
+        }
+
+        public override void MapRemoved()
+        {
+            BodyOverlayHandler.bodiesHandlers.Remove(this);
+            base.MapRemoved();
         }
 
         public void Register(CompBuildingCore core)
@@ -27,7 +34,6 @@ namespace RimWorld
             {
                 body = new BuildingBody();
                 bodies.Add(core.bodyId, body);
-                BodyOverlayHandler.bodies.Add(body);
             }
             body.Register(core);
         }
@@ -39,7 +45,6 @@ namespace RimWorld
             {
                 body = new BuildingBody();
                 bodies.Add(comp.bodyId, body);
-                BodyOverlayHandler.bodies.Add(body);
             }
             body.Register(comp);
         }
@@ -51,7 +56,6 @@ namespace RimWorld
             {
                 body = new BuildingBody();
                 bodies.Add(converter.bodyId, body);
-                BodyOverlayHandler.bodies.Add(body);
             }
             body.Register(converter);
         }
@@ -63,7 +67,6 @@ namespace RimWorld
             {
                 body = new BuildingBody();
                 bodies.Add(comp.bodyId, body);
-                BodyOverlayHandler.bodies.Add(body);
             }
             body.Register(comp);
         }
