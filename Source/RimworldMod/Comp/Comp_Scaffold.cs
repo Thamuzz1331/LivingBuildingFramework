@@ -52,7 +52,7 @@ namespace RimWorld
 			}
 			replacement.Rotation = parent.Rotation;
 			replacement.Position = parent.Position;
-			replacement.SetFaction(Faction.OfPlayer);
+			replacement.SetFaction(parent.Faction);
 			parent.Destroy();
 			replacement.SpawnSetup(converter.parent.Map, false);
             return replacement;
