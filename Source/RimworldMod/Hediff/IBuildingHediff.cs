@@ -13,5 +13,6 @@ namespace RimWorld
         bool ShouldAddTo(CompBuildingBodyPart target);
         void Apply(CompBuildingBodyPart target);
         void Remove(CompBuildingBodyPart target);
+        float StatMult(string stat);
     }
 }

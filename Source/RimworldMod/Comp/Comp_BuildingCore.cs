@@ -80,14 +80,20 @@ namespace RimWorld
         }
         public virtual float GetStat(string stat)
         {
+            float ret = stats.TryGetValue(stat, 1f);
+            foreach (IHediff diff in hediffs)
+            {
+                ret *= diff.StatMult(stat);
+            }
+
             switch (stat)
             {
                 case "growthEfficiency":
-                    return stats.TryGetValue(stat, 1f) * GetStat("metabolicEfficiency");
+                    return ret * GetStat("metabolicEfficiency");
                 case "growthSpeed":
-                    return stats.TryGetValue(stat, 1f) * GetStat("metabolicSpeed");
+                    return ret * GetStat("metabolicSpeed");
                 default:
-                    return stats.TryGetValue(stat, 1f);
+                    return ret;
             }
         }
         public virtual float GetMultiplier(string mult)

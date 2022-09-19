@@ -156,7 +156,12 @@ namespace RimWorld
         }
         public virtual void UpdatePassiveConsumption()
         {
-            passiveConsumption = 0.05f*(bodyParts.Count + 150);
+            float metabolicOffset = 1f;
+            if (heart != null)
+            {
+                metabolicOffset = heart.GetStat("metabolcEfficiency");
+            }
+            passiveConsumption = (0.05f*(bodyParts.Count + 150))/metabolicOffset;
             foreach (CompNutritionConsumer c in consumers)
             {
                 passiveConsumption += c.getConsumptionPerPulse();
