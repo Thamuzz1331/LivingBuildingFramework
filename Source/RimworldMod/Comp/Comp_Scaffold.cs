@@ -18,7 +18,7 @@ namespace RimWorld
 
             foreach (IntVec3 r in GenAdj.CellsOccupiedBy(parent))
             {
-                foreach (IntVec3 c in GenAdjFast.AdjacentCells8Way(r))
+                foreach (IntVec3 c in GenAdjFast.AdjacentCellsCardinal(r))
                 {
                     foreach (Thing adj in c.GetThingList(parent.Map))
                     {

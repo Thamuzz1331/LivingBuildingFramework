@@ -74,10 +74,16 @@ namespace RimWorld
         public override void MapComponentTick()
         {
             base.MapComponentTick();
-            if (curTick % 120 == 0) { 
-                foreach (string b in bodies.Keys)
+            bool nutritionTick = curTick % 120 == 0;
+            foreach (string b in bodies.Keys)
+            {
+                if (nutritionTick)
                 {
                     bodies.TryGetValue(b).RunNutrition(120f);
+                }
+                foreach(Hediff_Building diff in bodies.TryGetValue(b).hediffs)
+                {
+                    diff.Tick();
                 }
             }
             curTick++;

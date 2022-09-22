@@ -15,7 +15,23 @@ namespace RimWorld
 
         public String bodyId = "NA";
         public BuildingBody body = null;
-        public List<IHediff> hediffs = new List<IHediff>();
+        public List<Hediff_Building> hediffs = new List<Hediff_Building>();
+
+        public virtual bool HeartSpawned
+        {
+            get
+            {
+                return (this.body != null && this.body.heart != null);
+            }
+        }
+
+        public virtual bool VisibleHediffs
+        {
+            get
+            {
+                return hediffs.Any(diff => diff.visible);
+            }
+        }
 
         public void SetId(String _id)
         {
@@ -26,22 +42,15 @@ namespace RimWorld
         {
             base.PostExposeData();
             Scribe_Values.Look<String>(ref bodyId, "bodyId", "NA");
-            Scribe_Collections.Look<IHediff>(ref hediffs, "hediffs", LookMode.Deep);
+            Scribe_Collections.Look<Hediff_Building>(ref hediffs, "hediffs", LookMode.Deep);
         }
 
         public override void PostSpawnSetup(bool respawningAfterLoad)
         {
-            if(respawningAfterLoad)
-            {
-                foreach (IHediff hediff in hediffs)
-                {
-                    hediff.Apply(this);
-                }
-            }
             ((MapCompBuildingTracker)this.parent.Map.components.Where(t => t is MapCompBuildingTracker).FirstOrDefault()).Register(this);
             foreach (IntVec3 r in GenAdj.CellsOccupiedBy(parent))
             {
-                List<IntVec3> adjSpaces = GenAdjFast.AdjacentCells8Way(r);
+                List<IntVec3> adjSpaces = GenAdjFast.AdjacentCellsCardinal(r);
                 //adjSpaces = adjSpaces.OrderBy(a => Rand.Range(0, 100)).ToList();
                 foreach (IntVec3 c in adjSpaces)
                 {
@@ -72,9 +81,12 @@ namespace RimWorld
             {
                 b.Append("Flesh of " + body.GetName());
             }
-            foreach(IHediff diff in hediffs)
+            foreach(Hediff_Building diff in hediffs)
             {
-                b.Append("\nHediff " + diff.ToString());
+                if (diff.visible)
+                {
+                    b.Append("\nHediff " + diff.ToString());
+                }
             }
             return b.ToString();
         }
@@ -105,6 +117,39 @@ namespace RimWorld
         public virtual string GetSpecies()
         {
             return Props.species;
+        }
+
+        public virtual void AddHediff(Hediff_Building toAdd)
+        {
+            toAdd.bodyPart = parent;
+            this.hediffs.Add(toAdd);
+            toAdd.PostAdd();
+            body.hediffs.Add(toAdd);
+        }
+
+        public virtual Hediff_Building TryGetHediff<T>(Hediff_Building failVal)
+        {
+            Hediff_Building ret = hediffs.Find(diff => diff is T);
+            if (ret == null)
+            {
+                return failVal;
+            }
+            return ret;
+        }
+
+        public virtual void RemoveHediff(Hediff_Building b)
+        {
+            hediffs.Remove(b);
+        }
+
+        public virtual void RemoveHediff(string removeLabel)
+        {
+            hediffs = hediffs.FindAll(diff => !(diff.label == removeLabel));
+        }
+
+        public virtual void RemoveHediff<T>()
+        {
+            hediffs = hediffs.FindAll(diff => !(diff is T));
         }
 
     }

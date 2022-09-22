@@ -81,9 +81,9 @@ namespace RimWorld
         public virtual float GetStat(string stat)
         {
             float ret = stats.TryGetValue(stat, 1f);
-            foreach (IHediff diff in hediffs)
+            foreach (Hediff_Building diff in hediffs)
             {
-                ret *= diff.StatMult(stat);
+                ret *= diff.StatMod(stat);
             }
 
             switch (stat)

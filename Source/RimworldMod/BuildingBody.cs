@@ -15,6 +15,8 @@ namespace RimWorld
         public CompBuildingCore heart = null;
         public CompScaffoldConverter scaffoldConverter = null;
 
+        public HashSet<Hediff_Building> hediffs = new HashSet<Hediff_Building>();
+
         public HashSet<Thing> bodyParts = new HashSet<Thing>();
         public HashSet<CompNutritionConsumer> consumers = new HashSet<CompNutritionConsumer>();
         public HashSet<CompNutritionStore> stores = new HashSet<CompNutritionStore>();
