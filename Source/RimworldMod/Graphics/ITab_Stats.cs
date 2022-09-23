@@ -41,6 +41,16 @@ namespace RimWorld
 			}
 
 			rect = new Rect(this.size.x/2, 30f, this.size.x/2, 30f);
+			Widgets.Label(rect, core.ToString());
+			foreach(Hediff_Building diff in core.hediffs)
+            {
+				if (diff.visible)
+                {
+					rect = new Rect(this.size.x/2+20f, rect.y+30, this.size.x/2-20f, 30f);
+					Widgets.Label(rect, diff.LabelBase);
+                }
+            }
+			rect = new Rect(this.size.x/2, rect.y+30, this.size.x/2, 30f);
 			foreach(Thing b in core.body.bodyParts)
             {
 				CompBuildingBodyPart bp = b.TryGetComp<CompBuildingBodyPart>();

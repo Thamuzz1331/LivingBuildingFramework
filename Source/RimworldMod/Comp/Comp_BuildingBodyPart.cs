@@ -57,7 +57,7 @@ namespace RimWorld
                     foreach (Thing adj in c.GetThingList(parent.Map))
                     {
                         CompScaffold scaff = adj.TryGetComp<CompScaffold>();
-                        if (scaff != null && scaff.GetSpecies() == this.GetSpecies())
+                        if (scaff != null && !scaff.transforming && scaff.GetSpecies() == this.GetSpecies())
                         {
                             AddScaff(adj);
                             return;

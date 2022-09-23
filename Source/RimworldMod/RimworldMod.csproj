@@ -99,7 +99,8 @@
 	<Compile Include="Overlay/BodyOverlayDrawer.cs" />
 
 	<Compile Include="BuildingBody.cs" />
-	<Compile Include="Hediff/BuildingHediff.cs" />
+	<Compile Include="Buildings/Building_Scaffold.cs" />
+    <Compile Include="Hediff/BuildingHediff.cs" />
     <Compile Include="Comp/Comp_BuildingBodyPart.cs" />
     <Compile Include="Comp/CompProperties_BuildingBodyPart.cs" />
     <Compile Include="Comp/Comp_BuildingCore.cs" />

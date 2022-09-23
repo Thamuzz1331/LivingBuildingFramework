@@ -95,7 +95,11 @@ namespace RimWorld
 
 		public virtual void AddToConvert(Thing t)
         {
-			toConvert.Enqueue(t);
+			if (t.TryGetComp<CompScaffold>() != null 
+				&& !t.TryGetComp<CompScaffold>().transforming)
+            {
+				toConvert.Enqueue(t);
+            }
 		}
 
 		public virtual void DetectionPulse()
@@ -196,7 +200,7 @@ namespace RimWorld
 							return ret;
 						toReplace = toConvert.Dequeue();
 						claimed.Remove(toReplace);
-						if (toReplace.TryGetComp<CompScaffold>() != null && !toReplace.Destroyed)
+						if (toReplace.TryGetComp<CompScaffold>() != null && !toReplace.Destroyed && !toReplace.TryGetComp<CompScaffold>().transforming)
 						{
 							searching = false;
 						}
@@ -236,6 +240,31 @@ namespace RimWorld
         {
 			return new List<TerrainDef>();
         }
+
+		public override IEnumerable<Gizmo> CompGetGizmosExtra()
+		{
+			foreach (Gizmo gizmo in base.CompGetGizmosExtra())
+			{
+				yield return gizmo;
+			}
+			if (Prefs.DevMode)
+	        {
+				yield return new Command_Action
+			    {
+				    defaultLabel = "DEBUG: Grow All",
+				    action = delegate()
+				    {
+						bool remaining = true;
+						while (remaining)
+                        {
+							ConvertScaffold();
+							remaining = (toConvert.Count > 0);
+                        }
+				    }
+			    };
+			}
+		}
+
 	}
 	
 }

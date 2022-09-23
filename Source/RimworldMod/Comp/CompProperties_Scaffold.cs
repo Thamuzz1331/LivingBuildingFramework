@@ -11,6 +11,8 @@ namespace RimWorld
     {
         public string species = null;
         public string transformString = null;
+        public float transformTime = 300f;
+
         public CompProperties_Scaffold()
         {
             compClass = typeof(CompScaffold);

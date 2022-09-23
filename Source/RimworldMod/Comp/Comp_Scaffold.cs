@@ -12,20 +12,48 @@ namespace RimWorld
     {
         public CompProperties_Scaffold Props => (CompProperties_Scaffold)props;
 
+        public bool transforming = false;
+        public float transformCountdown;
+        public CompScaffoldConverter converter;
+        public ThingDef transformDef;
+
+        public virtual float TransformTime
+        {
+            get
+            {
+                if (converter != null)
+                {
+                    return Props.transformTime / converter.body.heart.GetStat("metabolicSpeed");
+                }
+                return Props.transformTime; 
+            }
+        }
+
+        public override void PostExposeData()
+        {
+            base.PostExposeData();
+            Scribe_Values.Look<bool>(ref transforming, "transforming", false);
+            Scribe_Values.Look<float>(ref transformCountdown, "transformCountdown", 0f);
+            Scribe_Values.Look<CompScaffoldConverter>(ref converter, "converter", null);
+            Scribe_Defs.Look(ref transformDef, "transformDef");
+        }
+
         public override void PostSpawnSetup(bool respawningAfterLoad)
         {
             base.PostSpawnSetup(respawningAfterLoad);
-
-            foreach (IntVec3 r in GenAdj.CellsOccupiedBy(parent))
+            if (!transforming)
             {
-                foreach (IntVec3 c in GenAdjFast.AdjacentCellsCardinal(r))
+                foreach (IntVec3 r in GenAdj.CellsOccupiedBy(parent))
                 {
-                    foreach (Thing adj in c.GetThingList(parent.Map))
+                    foreach (IntVec3 c in GenAdjFast.AdjacentCellsCardinal(r))
                     {
-                        CompBuildingBodyPart flesh = adj.TryGetComp<CompBuildingBodyPart>();
-                        if (flesh != null && flesh.Props.species == this.Props.species)
+                        foreach (Thing adj in c.GetThingList(parent.Map))
                         {
-                            flesh.AddScaff(parent);
+                            CompBuildingBodyPart flesh = adj.TryGetComp<CompBuildingBodyPart>();
+                            if (flesh != null && flesh.Props.species == this.Props.species)
+                            {
+                                flesh.AddScaff(parent);
+                            }
                         }
                     }
                 }
@@ -60,12 +88,33 @@ namespace RimWorld
 
         public virtual Thing Convert(CompScaffoldConverter converter)
         {
-            ThingDef replacementDef = this.GetConversionDef(converter);
-            if (replacementDef != null)
+            if (transforming)
             {
-                return MakeReplacement(replacementDef, converter);
+                return null;
+            }
+            transformDef = this.GetConversionDef(converter);
+            if (transformDef != null)
+            {
+                this.converter = converter;
+                this.transformCountdown = Props.transformTime;
+                transforming = true;
+                return parent;
+                //return MakeReplacement(replacementDef, converter);
             }
             return null;
+        }
+
+        public override void CompTick()
+        {
+            base.CompTick();
+            if (transforming)
+            {
+                if (transformCountdown <= 0)
+                {
+                    MakeReplacement(transformDef, converter);
+                }
+                transformCountdown--;
+            }
         }
 
         public virtual string GetSpecies()
