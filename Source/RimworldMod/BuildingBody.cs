@@ -16,7 +16,7 @@ namespace RimWorld
         public CompScaffoldConverter scaffoldConverter = null;
 
         public HashSet<Hediff_Building> hediffs = new HashSet<Hediff_Building>();
-
+        public HashSet<CompScaffold> transformingScaff = new HashSet<CompScaffold>();
         public HashSet<Thing> bodyParts = new HashSet<Thing>();
         public HashSet<CompNutritionConsumer> consumers = new HashSet<CompNutritionConsumer>();
         public HashSet<CompNutritionStore> stores = new HashSet<CompNutritionStore>();
@@ -109,6 +109,12 @@ namespace RimWorld
                 nutritionCapacity += ((CompNutritionStore)comp).getNutrientCapacity();
                 currentNutrition += ((CompNutritionStore)comp).getCurrentNutrition();
             }
+            comp.body = this;
+        }
+
+        public virtual void Register(CompScaffold comp)
+        {
+            transformingScaff.Add(comp);
             comp.body = this;
         }
 
@@ -221,7 +227,6 @@ namespace RimWorld
                 net = net * -1;
                 if (net > this.currentNutrition)
                 {
-//                    Log.Message(net + " " + this.currentNutrition);
                     currentNutrition = 0;
                     foreach (CompNutritionStore store in stores)
                     {

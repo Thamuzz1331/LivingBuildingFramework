@@ -14,6 +14,8 @@ namespace RimWorld
 
         public bool transforming = false;
         public float transformCountdown;
+        public String bodyId;
+        public BuildingBody body = null;
         public CompScaffoldConverter converter;
         public ThingDef transformDef;
 
@@ -34,7 +36,7 @@ namespace RimWorld
             base.PostExposeData();
             Scribe_Values.Look<bool>(ref transforming, "transforming", false);
             Scribe_Values.Look<float>(ref transformCountdown, "transformCountdown", 0f);
-            Scribe_Values.Look<CompScaffoldConverter>(ref converter, "converter", null);
+            Scribe_Values.Look<string>(ref bodyId, "bodyId");
             Scribe_Defs.Look(ref transformDef, "transformDef");
         }
 
@@ -57,6 +59,9 @@ namespace RimWorld
                         }
                     }
                 }
+            }else
+            {
+                ((MapCompBuildingTracker)this.parent.Map.components.Where(t => t is MapCompBuildingTracker).FirstOrDefault()).Register(this);
             }
         }
 
@@ -95,6 +100,8 @@ namespace RimWorld
             transformDef = this.GetConversionDef(converter);
             if (transformDef != null)
             {
+                this.bodyId = converter.parent.TryGetComp<CompBuildingBodyPart>().bodyId;
+                converter.parent.TryGetComp<CompBuildingBodyPart>().body.Register(this);
                 this.converter = converter;
                 this.transformCountdown = Props.transformTime;
                 transforming = true;
@@ -104,13 +111,16 @@ namespace RimWorld
             return null;
         }
 
-        public override void CompTick()
+        public virtual void BodyTick()
         {
-            base.CompTick();
             if (transforming)
             {
                 if (transformCountdown <= 0)
                 {
+                    if (converter == null)
+                    {
+                        converter = body.scaffoldConverter;
+                    }
                     MakeReplacement(transformDef, converter);
                 }
                 transformCountdown--;

@@ -71,6 +71,17 @@ namespace RimWorld
             body.Register(comp);
         }
 
+        public void Register(CompScaffold scaff)
+        {
+            BuildingBody body = bodies.TryGetValue(scaff.bodyId);
+            if (body == null)
+            {
+                body = new BuildingBody();
+                bodies.Add(scaff.bodyId, body);
+            }
+            body.Register(scaff);
+        }
+
         public override void MapComponentTick()
         {
             base.MapComponentTick();
@@ -84,6 +95,21 @@ namespace RimWorld
                 foreach(Hediff_Building diff in bodies.TryGetValue(b).hediffs)
                 {
                     diff.Tick();
+                }
+                List<CompScaffold> toRemove = new List<CompScaffold>();
+                foreach(CompScaffold scaff in bodies.TryGetValue(b).transformingScaff)
+                {
+                    if (scaff.parent.Destroyed)
+                    {
+                        toRemove.Add(scaff);
+                    } else
+                    {
+                        scaff.BodyTick();
+                    }
+                }
+                foreach(CompScaffold scaff in toRemove)
+                {
+                    bodies.TryGetValue(b).transformingScaff.Remove(scaff);
                 }
             }
             curTick++;
