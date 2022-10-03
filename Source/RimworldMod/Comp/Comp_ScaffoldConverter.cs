@@ -181,7 +181,7 @@ namespace RimWorld
 			}
         }
 
-		public virtual List<Thing> ConvertScaffold()
+		public virtual List<Thing> ConvertScaffold(bool instant = false)
 		{
 			List<Thing> ret = new List<Thing>();
 			if (toConvert.Count <= 0)

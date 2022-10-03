@@ -91,7 +91,7 @@ namespace RimWorld
             return replacement;
         }
 
-        public virtual Thing Convert(CompScaffoldConverter converter)
+        public virtual Thing Convert(CompScaffoldConverter converter, bool instant = false)
         {
             if (transforming)
             {
@@ -103,6 +103,10 @@ namespace RimWorld
                 this.bodyId = converter.parent.TryGetComp<CompBuildingBodyPart>().bodyId;
                 converter.parent.TryGetComp<CompBuildingBodyPart>().body.Register(this);
                 this.converter = converter;
+                if (instant)
+                {
+                    return MakeReplacement(transformDef, converter);
+                }
                 this.transformCountdown = Props.transformTime;
                 transforming = true;
                 return parent;
