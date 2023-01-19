@@ -4,7 +4,7 @@ using UnityEngine;
 using Verse;
 using RimWorld;
 
-namespace LivingBuilding
+namespace LivingBuildings
 {
 	// Token: 0x02000005 RID: 5
 	public class BodyOverlayDrawer

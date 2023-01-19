@@ -6,9 +6,8 @@ using Verse;
 using RimWorld.Planet;
 using UnityEngine;
 using Verse.AI.Group;
-using LivingBuilding;
 
-namespace RimWorld
+namespace LivingBuildings
 {
     public class BuildingBody
     {
@@ -27,7 +26,7 @@ namespace RimWorld
         public float passiveConsumption = 0;
         public float nutritionGen = 0;
 
-        public LivingBuilding.BodyOverlayDrawer Drawer
+        public LivingBuildings.BodyOverlayDrawer Drawer
 		{
 			get
 			{

@@ -14,7 +14,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\1.3\Assemblies\</OutputPath>
+    <OutputPath>..\..\1.4\Assemblies\</OutputPath>
     <DefineConstants>DEBUG;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -25,7 +25,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <DebugType>full</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\1.3\Assemblies\</OutputPath>
+    <OutputPath>..\..\1.4\Assemblies\</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
@@ -34,7 +34,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
-    <OutputPath>..\..\1.3\Assemblies\</OutputPath>
+    <OutputPath>..\..\1.4\Assemblies\</OutputPath>
     <DefineConstants>DEBUG;</DefineConstants>
     <DebugType>full</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -42,7 +42,7 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
-    <OutputPath>..\..\1.3\Assemblies\</OutputPath>
+    <OutputPath>..\..\1.4\Assemblies\</OutputPath>
     <Optimize>true</Optimize>
     <DebugType>full</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -92,16 +92,19 @@
   </ItemGroup>
   <ItemGroup>
 	<Compile Include="LivingBuildingMod.cs" />
-	  
+	 
 	<Compile Include="Overlay/BodyOverlayHandler.cs" />
 	<Compile Include="Overlay/BodyOverlaySettingsHandler.cs" />
 	<Compile Include="Overlay/BodyOverlaySettings.cs" />
 	<Compile Include="Overlay/BodyOverlayDrawer.cs" />
-
+    <Compile Include="Defs/BuildingHediffDef.cs" />
+	<Compile Include="Defs/BuildingGeneDef.cs" />
 	<Compile Include="BuildingBody.cs" />
 	<Compile Include="Buildings/Building_Scaffold.cs" />
     <Compile Include="Hediff/BuildingHediff.cs" />
-    <Compile Include="Comp/Comp_BuildingBodyPart.cs" />
+    <Compile Include="Gene/BuildingGene.cs" />
+	  <Compile Include="Gene/BuildingGeneMaker.cs" />
+	  <Compile Include="Comp/Comp_BuildingBodyPart.cs" />
     <Compile Include="Comp/CompProperties_BuildingBodyPart.cs" />
     <Compile Include="Comp/Comp_BuildingCore.cs" />
     <Compile Include="Comp/CompProperties_BuildingCore.cs" />

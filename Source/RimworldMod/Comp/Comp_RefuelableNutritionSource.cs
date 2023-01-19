@@ -5,8 +5,9 @@ using System.Text;
 using UnityEngine;
 using Verse;
 using Verse.Sound;
+using RimWorld;
 
-namespace RimWorld
+namespace LivingBuildings
 {
     public class CompRefuelableNutritionSource : CompNutritionSource
     {

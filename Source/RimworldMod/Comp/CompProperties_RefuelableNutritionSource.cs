@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Verse;
 
-namespace RimWorld
+namespace LivingBuildings
 {
     public class CompProperties_RefuelableNutritionSource : CompProperties_NutritionSource
     {

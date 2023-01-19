@@ -8,13 +8,12 @@ using Verse.AI.Group;
 
 namespace LivingBuildings
 {
-    public class Hediff_Building : IExposable
-    {
+	public class BuildingGene : IExposable
+	{
 		public string label = "";
-		public bool visible = true;
 		public Thing bodyPart;
 		public CompBuildingBodyPart bp;
-		public Dictionary<string, float> statMods = new Dictionary<string, float>();
+
 
 		public virtual string LabelBase
 		{
@@ -25,37 +24,35 @@ namespace LivingBuildings
 		}
 
 		public virtual CompBuildingBodyPart BodyPart
-        {
-            get
-            {
+		{
+			get
+			{
 				return bp;
-            }
-        }
+			}
+		}
 
 		void IExposable.ExposeData()
-        {
+		{
 			Scribe_Values.Look<string>(ref label, "label", "");
-			Scribe_Values.Look<bool>(ref visible, "visible", true);
 			Scribe_References.Look<Thing>(ref bodyPart, "bodyPart");
 			bp = bodyPart.TryGetComp<CompBuildingBodyPart>();
-			Scribe_Collections.Look(ref statMods, "statMods");
 			PostExposeData();
 		}
 
 		public virtual void PostSpawnSetup(bool respawningAfterLoad)
-        {
+		{
 
-        }
+		}
 
 		public virtual void PostExposeData()
-        {
+		{
 
-        }
+		}
 
 		public virtual void PostAdd()
-        {
-			
-        }
+		{
+
+		}
 
 		public virtual void PostRemove()
         {
@@ -63,13 +60,8 @@ namespace LivingBuildings
         }
 
 		public virtual void Tick()
-        {
+		{
 
-        }
-
-		public virtual float StatMod(string stat)
-        {
-			return statMods.TryGetValue(stat, 1f);
-        }
+		}
 	}
 }

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Verse;
 
-namespace RimWorld
+namespace LivingBuildings
 {
     public class CompProperties_Scaffold : CompProperties
     {

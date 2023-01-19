@@ -4,12 +4,11 @@ using RimWorld;
 using RimWorld.Planet;
 using Verse;
 
-namespace LivingBuilding
+namespace LivingBuildings
 {
 	[StaticConstructorOnStartup]
 	internal static class Patching
 	{
-		// Token: 0x06000024 RID: 36 RVA: 0x00002F2C File Offset: 0x0000112C
 		static Patching()
 		{
 			Harmony harmony = new Harmony("LivingBuildingPatch");
@@ -21,7 +20,6 @@ namespace LivingBuilding
 	[HarmonyPatch(typeof(MapInterface), "MapInterfaceUpdate")]
 	internal class MapInterfacePatch
 	{
-		// Token: 0x0600001E RID: 30 RVA: 0x00002DC4 File Offset: 0x00000FC4
 		[HarmonyPostfix]
 		public static void PostFix()
 		{
@@ -36,7 +34,6 @@ namespace LivingBuilding
 	[HarmonyPatch(typeof(PlaySettings), "DoPlaySettingsGlobalControls")]
 	internal class PlaySettingsPatch
 	{
-		// Token: 0x0600001C RID: 28 RVA: 0x00002D70 File Offset: 0x00000F70
 		[HarmonyPostfix]
 		public static void PostFix(WidgetRow row, bool worldView)
 		{

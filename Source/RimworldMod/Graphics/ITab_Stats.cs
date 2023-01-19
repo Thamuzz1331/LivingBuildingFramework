@@ -5,7 +5,7 @@ using RimWorld;
 using UnityEngine;
 using Verse;
 
-namespace RimWorld
+namespace LivingBuildings
 {
 	public class ITab_Stats : ITab
 	{

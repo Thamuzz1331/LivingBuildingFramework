@@ -6,9 +6,8 @@ using Verse;
 using RimWorld.Planet;
 using UnityEngine;
 using Verse.AI.Group;
-using LivingBuilding;
 
-namespace RimWorld
+namespace LivingBuildings
 {
     [StaticConstructorOnStartup]
     public class MapCompBuildingTracker : MapComponent
