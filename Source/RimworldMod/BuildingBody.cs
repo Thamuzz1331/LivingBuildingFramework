@@ -7,14 +7,16 @@ using RimWorld.Planet;
 using UnityEngine;
 using Verse.AI.Group;
 
-namespace LivingBuildings
+namespace RimWorld
 {
     public class BuildingBody
     {
         public CompBuildingCore heart = null;
         public CompScaffoldConverter scaffoldConverter = null;
 
-        public HashSet<Hediff_Building> hediffs = new HashSet<Hediff_Building>();
+        public HashSet<BuildingHediff> hediffs = new HashSet<BuildingHediff>();
+        public HashSet<Building_Addiction> addictions = new HashSet<Building_Addiction>();
+        public Dictionary<string, HashSet<CompAddictionSupplier>> addictionSuppliers = new Dictionary<string, HashSet<CompAddictionSupplier>>();
         public HashSet<CompScaffold> transformingScaff = new HashSet<CompScaffold>();
         public HashSet<Thing> bodyParts = new HashSet<Thing>();
         public HashSet<CompNutritionConsumer> consumers = new HashSet<CompNutritionConsumer>();
@@ -26,7 +28,7 @@ namespace LivingBuildings
         public float passiveConsumption = 0;
         public float nutritionGen = 0;
 
-        public LivingBuildings.BodyOverlayDrawer Drawer
+        public BodyOverlayDrawer Drawer
 		{
 			get
 			{
@@ -117,6 +119,17 @@ namespace LivingBuildings
             comp.body = this;
         }
 
+        public virtual void RegisterAddictionSupplier(CompAddictionSupplier addictionSupplier)
+        {
+            if (addictionSuppliers.TryGetValue(addictionSupplier.Props.addictionId, null) == null)
+            {
+                addictionSuppliers.Add(addictionSupplier.Props.addictionId, new HashSet<CompAddictionSupplier>());
+            }
+            addictionSuppliers
+                .TryGetValue(addictionSupplier.Props.addictionId, new HashSet<CompAddictionSupplier>())
+                .Add(addictionSupplier);
+        }
+
         public virtual void DeRegister(CompBuildingBodyPart comp)
         {
             bodyParts.Remove(comp.parent);
@@ -141,6 +154,12 @@ namespace LivingBuildings
                 source.Add((CompNutritionSource)comp);
                 nutritionGen += ((CompNutritionSource)comp).getNutritionPerPulse();
             }
+        }
+
+        public virtual void DeRegisterAddictionSupplier(CompAddictionSupplier addictionSupplier)
+        {
+            addictionSuppliers.TryGetValue(addictionSupplier.Props.addictionId, new HashSet<CompAddictionSupplier>())
+                .Remove(addictionSupplier);
         }
 
         public virtual void UpdateNutritionGeneration()
@@ -290,6 +309,36 @@ namespace LivingBuildings
             } else
             {
                 return ExtractNutrition(retainNutrition, remainingHunger, depth+1);
+            }
+        }
+
+        public virtual void RunAddictions(float ticks)
+        {
+            foreach (Building_Addiction addiction in addictions)
+            {
+                HashSet<CompAddictionSupplier> suppliers = new HashSet<CompAddictionSupplier>();
+                foreach(CompAddictionSupplier supplier in addictionSuppliers.TryGetValue(addiction.def.defName, new HashSet<CompAddictionSupplier>()))
+                {
+                    if (supplier.CanSupply())
+                    {
+                        suppliers.Add(supplier);
+                    } else
+                    {
+                        supplier.SetConsumption(0f);
+                    }
+                }
+                if (suppliers.Count > 0)
+                {
+                    addiction.withdrawl = 0;
+                    float consumptionRate = (addiction.massMult * bodyParts.Count)/suppliers.Count;
+                    foreach(CompAddictionSupplier supplier in suppliers)
+                    {
+                        supplier.SetConsumption(consumptionRate);
+                    }
+                } else
+                {
+                    addiction.withdrawl += addiction.withdrawRate * ticks;
+                }
             }
         }
     }

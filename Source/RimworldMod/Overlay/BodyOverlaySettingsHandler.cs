@@ -6,7 +6,7 @@ using SettingsHelper;
 using UnityEngine;
 using Verse;
 
-namespace LivingBuildings
+namespace RimWorld
 {
 	// Token: 0x02000002 RID: 2
 	internal class BodyOverlaySettingsHandler : Mod

@@ -5,7 +5,7 @@ using RimWorld;
 using UnityEngine;
 using Verse;
 
-namespace LivingBuildings
+namespace RimWorld
 {
 	public class ITab_Stats : ITab
 	{
@@ -31,19 +31,21 @@ namespace LivingBuildings
 		{
 			Thing sel = base.SelThing;
 			core = sel.TryGetComp<CompBuildingCore>();
-			Rect rect = new Rect(20f, 30f, this.size.x/4, 30f);
+			Rect rect = new Rect(10f, 30f, this.size.x/4, 30f);
 			foreach(string stat in core.stats.Keys)
             {
 				Widgets.Label(rect, stat.Translate());
 				rect = new Rect(this.size.x/4, rect.y, this.size.x/4, 30f);
-				Widgets.Label(rect, (core.GetStat(stat)*100 + "%"));
+				string statVal = (Math.Truncate(core.GetStat(stat)*10000)/100) + "%";
+				Widgets.Label(rect, statVal);
 				rect = new Rect(20f, rect.y + 30f, this.size.x/4, 30f);
 			}
 
 			rect = new Rect(this.size.x/2, 30f, this.size.x/2, 30f);
 			Widgets.Label(rect, core.ToString());
-			foreach(Hediff_Building diff in core.hediffs)
+			foreach(BuildingHediff diff in core.hediffs)
             {
+				Log.Message("Diff visible " + diff.visible);
 				if (diff.visible)
                 {
 					rect = new Rect(this.size.x/2+20f, rect.y+30, this.size.x/2-20f, 30f);
@@ -57,7 +59,7 @@ namespace LivingBuildings
 				if (bp.VisibleHediffs)
                 {
 					Widgets.Label(rect, bp.ToString());
-					foreach(Hediff_Building diff in bp.hediffs)
+					foreach(BuildingHediff diff in bp.hediffs)
                     {
 						if (diff.visible)
                         {

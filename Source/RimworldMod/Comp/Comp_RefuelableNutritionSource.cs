@@ -7,7 +7,7 @@ using Verse;
 using Verse.Sound;
 using RimWorld;
 
-namespace LivingBuildings
+namespace RimWorld
 {
     public class CompRefuelableNutritionSource : CompNutritionSource
     {

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using Verse;
 
-namespace LivingBuildings
+namespace RimWorld
 {
     public class CompBuildingBodyPart : ThingComp
     {
@@ -15,7 +15,7 @@ namespace LivingBuildings
 
         public String bodyId = "NA";
         public BuildingBody body = null;
-        public List<Hediff_Building> hediffs = new List<Hediff_Building>();
+        public List<BuildingHediff> hediffs = new List<BuildingHediff>();
 
         public virtual bool HeartSpawned
         {
@@ -42,7 +42,7 @@ namespace LivingBuildings
         {
             base.PostExposeData();
             Scribe_Values.Look<String>(ref bodyId, "bodyId", "NA");
-            Scribe_Collections.Look<Hediff_Building>(ref hediffs, "hediffs", LookMode.Deep);
+            Scribe_Collections.Look<BuildingHediff>(ref hediffs, "hediffs", LookMode.Deep);
         }
 
         public override void PostSpawnSetup(bool respawningAfterLoad)
@@ -81,7 +81,7 @@ namespace LivingBuildings
             {
                 b.Append("Flesh of " + body.GetName());
             }
-            foreach(Hediff_Building diff in hediffs)
+            foreach(BuildingHediff diff in hediffs)
             {
                 if (diff.visible)
                 {
@@ -119,17 +119,18 @@ namespace LivingBuildings
             return Props.species;
         }
 
-        public virtual void AddHediff(Hediff_Building toAdd)
+        public virtual void AddHediff(BuildingHediff toAdd)
         {
             toAdd.bodyPart = parent;
+            toAdd.bp = this;
             this.hediffs.Add(toAdd);
             toAdd.PostAdd();
             body.hediffs.Add(toAdd);
         }
 
-        public virtual Hediff_Building TryGetHediff<T>(Hediff_Building failVal)
+        public virtual BuildingHediff TryGetHediff<T>(BuildingHediff failVal)
         {
-            Hediff_Building ret = hediffs.Find(diff => diff is T);
+            BuildingHediff ret = hediffs.Find(diff => diff is T);
             if (ret == null)
             {
                 return failVal;
@@ -137,19 +138,28 @@ namespace LivingBuildings
             return ret;
         }
 
-        public virtual void RemoveHediff(Hediff_Building b)
+        public virtual void RemoveHediff(BuildingHediff b)
         {
             hediffs.Remove(b);
+            b.PostRemove();
         }
 
         public virtual void RemoveHediff(string removeLabel)
         {
-            hediffs = hediffs.FindAll(diff => !(diff.label == removeLabel));
+            List<BuildingHediff> toRemove = hediffs.FindAll(diff => (diff.DisplayLabel == removeLabel));
+            foreach(BuildingHediff diff in toRemove)
+            {
+                RemoveHediff(diff);
+            }
         }
 
         public virtual void RemoveHediff<T>()
         {
-            hediffs = hediffs.FindAll(diff => !(diff is T));
+            List<BuildingHediff> toRemove = hediffs.FindAll(diff => (diff is T));
+            foreach(BuildingHediff diff in toRemove)
+            {
+                RemoveHediff(diff);
+            }
         }
 
     }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using Verse;
 
-namespace LivingBuildings
+namespace RimWorld
 {
     public class CompBuildingCore : CompBuildingBodyPart
     {
@@ -14,6 +14,7 @@ namespace LivingBuildings
         public string bodyName = "nameless thing";
         public float hungerDuration = 0;
         public float hungerThreshold = 300f;
+        public List<BuildingGene> genes = new List<BuildingGene>();
 
         public Dictionary<string, float> stats = new Dictionary<string, float>() {
             {"metabolicEfficiency", 1f},
@@ -28,6 +29,7 @@ namespace LivingBuildings
             base.PostExposeData();
             Scribe_Values.Look<String>(ref bodyId, "bodyId", null);
             Scribe_Values.Look<float>(ref hungerDuration, "hungerDuration", 300f);
+            Scribe_Collections.Look<BuildingGene>(ref genes, "genes");
         }
 
         public override void PostSpawnSetup(bool respawningAfterLoad)
@@ -47,13 +49,27 @@ namespace LivingBuildings
                 ((MapCompBuildingTracker)parent.Map.components.Where(t => t is MapCompBuildingTracker).FirstOrDefault()).Register(parent.TryGetComp<CompScaffoldConverter>());
                 parent.TryGetComp<CompScaffoldConverter>().DetectionPulse();
             }
+            foreach(BuildingGene g in genes)
+            {
+                g.PostSpawnSetup(respawningAfterLoad);
+            }
+        }
 
+        public virtual void AddGene(BuildingGene b)
+        {
+            genes.Add(b);
+            b.PostAdd(this);
+        }
+
+        public virtual void RemoveGene(BuildingGene b)
+        {
+            genes.Remove(b);
+            b.PostRemove(this);
         }
 
         public override void CompTick()
         {
             base.CompTick();
-
         }
 
         public override void PostDeSpawn(Map map)
@@ -78,10 +94,11 @@ namespace LivingBuildings
         {
 
         }
+
         public virtual float GetStat(string stat)
         {
             float ret = stats.TryGetValue(stat, 1f);
-            foreach (Hediff_Building diff in hediffs)
+            foreach (BuildingHediff diff in hediffs)
             {
                 ret *= diff.StatMod(stat);
             }
@@ -96,6 +113,7 @@ namespace LivingBuildings
                     return ret;
             }
         }
+
         public virtual float GetMultiplier(string mult)
         {
             return multipliers.TryGetValue(mult, 1f);

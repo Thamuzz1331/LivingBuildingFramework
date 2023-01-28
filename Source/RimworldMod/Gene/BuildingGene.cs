@@ -3,18 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Verse;
+using RimWorld;
 using UnityEngine;
 using Verse.AI.Group;
 
-namespace LivingBuildings
+namespace Verse
 {
 	public class BuildingGene : IExposable
 	{
-		public string label = "";
-		public Thing bodyPart;
-		public CompBuildingBodyPart bp;
-
-
+		public BuildingGeneDef def;
+		public string label;
+		public bool geneLineGene = false;
 		public virtual string LabelBase
 		{
 			get
@@ -23,19 +22,11 @@ namespace LivingBuildings
 			}
 		}
 
-		public virtual CompBuildingBodyPart BodyPart
-		{
-			get
-			{
-				return bp;
-			}
-		}
-
 		void IExposable.ExposeData()
 		{
+			Scribe_Defs.Look(ref def, "def");
 			Scribe_Values.Look<string>(ref label, "label", "");
-			Scribe_References.Look<Thing>(ref bodyPart, "bodyPart");
-			bp = bodyPart.TryGetComp<CompBuildingBodyPart>();
+			Scribe_Values.Look<bool>(ref geneLineGene, "geneLineGene", false);
 			PostExposeData();
 		}
 
@@ -49,12 +40,15 @@ namespace LivingBuildings
 
 		}
 
-		public virtual void PostAdd()
+		public virtual void PostAdd(CompBuildingCore core)
 		{
-
 		}
 
-		public virtual void PostRemove()
+		public virtual void PostRemove(CompBuildingCore core)
+        {
+        }
+
+		public virtual void PostMake()
         {
 
         }

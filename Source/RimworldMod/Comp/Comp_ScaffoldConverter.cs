@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using Verse;
 
-namespace LivingBuildings
+namespace RimWorld
 {
 	public class CompScaffoldConverter : ThingComp
 	{

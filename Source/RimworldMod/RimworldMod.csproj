@@ -102,7 +102,14 @@
 	<Compile Include="BuildingBody.cs" />
 	<Compile Include="Buildings/Building_Scaffold.cs" />
     <Compile Include="Hediff/BuildingHediff.cs" />
-    <Compile Include="Gene/BuildingGene.cs" />
+	  <Compile Include="Hediff/BuildingHediffMaker.cs" />
+	  <Compile Include="Hediff/BuildingHediffAddiction.cs" />
+	  <Compile Include="Hediff/BuildingHediffComp.cs" />
+	  <Compile Include="Hediff/BuildingHediffDrug.cs" />
+	  <Compile Include="Hediff/CompProperties_BHStat.cs" />
+	  <Compile Include="Hediff/Comp_BHStat.cs" />
+
+	  <Compile Include="Gene/BuildingGene.cs" />
 	  <Compile Include="Gene/BuildingGeneMaker.cs" />
 	  <Compile Include="Comp/Comp_BuildingBodyPart.cs" />
     <Compile Include="Comp/CompProperties_BuildingBodyPart.cs" />
@@ -121,7 +128,9 @@
     <Compile Include="Comp/CompProperties_Scaffold.cs" />
     <Compile Include="Comp/Comp_ScaffoldConverter.cs" />
 	<Compile Include="Comp/CompProperties_ScaffoldConverter.cs" />
-	<Compile Include="Comp/MapComp_BodyTracker.cs" />
+	  <Compile Include="Comp/Comp_AddictionSupplier.cs" />
+	  <Compile Include="Comp/CompProperties_AddictionSupplier.cs" />
+	  <Compile Include="Comp/MapComp_BodyTracker.cs" />
 
 
     <Compile Include="Graphics/ITab_Stats.cs" />

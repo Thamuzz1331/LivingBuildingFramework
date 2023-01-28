@@ -6,8 +6,9 @@ using Verse;
 using RimWorld.Planet;
 using UnityEngine;
 using Verse.AI.Group;
+using LivingBuildings;
 
-namespace LivingBuildings
+namespace RimWorld
 {
     [StaticConstructorOnStartup]
     public class MapCompBuildingTracker : MapComponent
@@ -91,10 +92,11 @@ namespace LivingBuildings
                 {
                     bodies.TryGetValue(b).RunNutrition(120f);
                 }
-                foreach(Hediff_Building diff in bodies.TryGetValue(b).hediffs)
+                foreach(BuildingHediff diff in bodies.TryGetValue(b).hediffs)
                 {
                     diff.Tick();
                 }
+                bodies.TryGetValue(b).RunAddictions(1f);
                 List<CompScaffold> toRemove = new List<CompScaffold>();
                 foreach(CompScaffold scaff in bodies.TryGetValue(b).transformingScaff)
                 {

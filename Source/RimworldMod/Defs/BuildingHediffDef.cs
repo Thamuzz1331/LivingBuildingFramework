@@ -8,16 +8,23 @@ using Verse;
 using UnityEngine;
 using Verse.AI;
 
-namespace LivingBuildings
+namespace Verse
 {
     public class BuildingHediffDef : Def
     {
-        public Type buildingHediffClass = typeof(Hediff_Building);
-        public float initialSeverity = 0;
+        public Type buildingHediffClass = typeof(BuildingHediff);
         public bool isBad = false;
-        [MustTranslate]
-        public string labelNoun;
-        [MustTranslate]
-        public string labelNounPretty;
+        public bool visible = true;
+//        [MustTranslate]
+//        public string labelNoun;
+//        [MustTranslate]
+//        public string labelNounPretty;
+        public List<CompProperties> comps;
+
+        public static BuildingHediffDef Named(string defName)
+        {
+            return DefDatabase<BuildingHediffDef>.GetNamed(defName, true);
+        }
+
     }
 }

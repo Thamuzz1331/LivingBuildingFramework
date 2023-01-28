@@ -8,12 +8,12 @@ using LivingBuildings;
 
 namespace RimWorld
 {
-    public class CompProperties_BuildingBodyPart : CompProperties
+    public class CompProperties_AddictionSupplier : CompProperties
     {
-        public string species = null;
-        public CompProperties_BuildingBodyPart()
+        public string addictionId;
+        public CompProperties_AddictionSupplier()
         {
-            compClass = typeof(CompBuildingBodyPart);
+            compClass = typeof(CompAddictionSupplier);
         }
     }
 

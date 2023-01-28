@@ -1,8 +1,8 @@
 E:\Steam\steamapps\common\RimWorld\Mods\LivingBuildingFramework\1.3\Assemblies\LivingBuildingFramework.dll
 E:\Steam\steamapps\common\RimWorld\Mods\LivingBuildingFramework\1.3\Assemblies\LivingBuildingFramework.pdb
-E:\Steam\steamapps\common\RimWorld\Mods\LivingBuildingFramework\Source\RimworldMod\obj\x86\Debug\RimworldMod.csproj.AssemblyReference.cache
 E:\Steam\steamapps\common\RimWorld\Mods\LivingBuildingFramework\Source\RimworldMod\obj\x86\Debug\RimworldMod.csproj.CoreCompileInputs.cache
 E:\Steam\steamapps\common\RimWorld\Mods\LivingBuildingFramework\Source\RimworldMod\obj\x86\Debug\LivingBuildingFramework.dll
 E:\Steam\steamapps\common\RimWorld\Mods\LivingBuildingFramework\Source\RimworldMod\obj\x86\Debug\LivingBuildingFramework.pdb
 E:\Steam\steamapps\common\RimWorld\Mods\LivingBuildingFramework\1.4\Assemblies\LivingBuildingFramework.dll
 E:\Steam\steamapps\common\RimWorld\Mods\LivingBuildingFramework\1.4\Assemblies\LivingBuildingFramework.pdb
+E:\Steam\steamapps\common\RimWorld\Mods\LivingBuildingFramework\Source\RimworldMod\obj\x86\Debug\RimworldMod.csproj.AssemblyReference.cache

@@ -1,12 +1,15 @@
 using System;
 
-namespace LivingBuildings
+namespace Verse
 {
 	public static class BuildingGeneMaker
 	{
 		public static BuildingGene MakeBuildingGene(BuildingGeneDef def)
 		{
 			BuildingGene bgene = (BuildingGene)Activator.CreateInstance(def.buildingGeneClass);
+			bgene.def = def;
+			bgene.label = def.label;
+			bgene.PostMake();
 			return bgene;
 		}
 

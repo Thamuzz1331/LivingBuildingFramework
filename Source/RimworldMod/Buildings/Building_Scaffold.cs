@@ -4,8 +4,9 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 using Verse;
+using LivingBuildings;
 
-namespace LivingBuildings
+namespace RimWorld
 {
     [StaticConstructorOnStartup]
     class Building_Scaffold : Building

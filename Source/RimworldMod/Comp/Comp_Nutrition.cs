@@ -6,7 +6,7 @@ using UnityEngine;
 using Verse;
 using Verse.Sound;
 
-namespace LivingBuildings
+namespace RimWorld
 {
     public class CompNutrition : ThingComp
     {
