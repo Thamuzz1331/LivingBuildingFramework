@@ -11,8 +11,6 @@ namespace RimWorld
     public class BuildingHediff : IExposable
     {
 		public BuildingHediffDef def;
-		public bool visible = true;
-		public string label = "";
 		public Thing bodyPart;
 		public CompBuildingBodyPart bp;
 		public Dictionary<string, float> statMods = new Dictionary<string, float>();
@@ -22,7 +20,7 @@ namespace RimWorld
 		{
 			get
 			{
-				return label;
+				return def.LabelCap;
 			}
 		}
 
@@ -31,6 +29,35 @@ namespace RimWorld
             get
             {
 				return LabelBase;
+            }
+        }
+
+		public virtual Color DisplayColor
+        {
+			get
+            {
+				return def.displayColor;
+            }
+        }
+
+		public virtual string HoverText
+        {
+			get
+            {
+				string ret = def.description + "\n";
+				foreach(string stat in statMods.Keys)
+                {
+					ret += "\n" + stat.Translate() + ": x" + this.StatMod(stat);
+                }
+				return ret;
+            }
+        }
+
+		public virtual bool Visible
+        {
+            get
+            {
+				return def.visible;
             }
         }
 
@@ -45,8 +72,6 @@ namespace RimWorld
 		void IExposable.ExposeData()
         {
 			Scribe_Defs.Look(ref def, "def");
-			Scribe_Values.Look<bool>(ref visible, "visible", true);
-			Scribe_Values.Look<string>(ref label, "label", "");
 			Scribe_References.Look<Thing>(ref bodyPart, "bodyPart");
 			bp = bodyPart.TryGetComp<CompBuildingBodyPart>();
 			Scribe_Collections.Look(ref statMods, "statMods");

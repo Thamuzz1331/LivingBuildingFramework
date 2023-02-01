@@ -14,6 +14,8 @@ namespace Verse
     {
         public Type buildingGeneClass = typeof(BuildingGene);
         public bool isArchoGene = false;
+		public int complexity = 1;
+		public int metabolicCost = 0;
 		[Unsaved(false)]
 		private Texture2D cachedIcon;
 		[NoTranslate]
@@ -36,6 +38,20 @@ namespace Verse
 				return this.cachedIcon;
 			}
 		}
+		public Color IconColor
+		{
+			get
+			{
+				return Color.white;
+			}
+		}
+		public string Description
+        {
+			get
+            {
+				return this.description;
+            }
+        }
 
 		public static BuildingGeneDef Named(string defName)
         {

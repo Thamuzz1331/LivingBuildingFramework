@@ -29,6 +29,7 @@ namespace RimWorld
             base.PostExposeData();
             Scribe_Values.Look<String>(ref bodyId, "bodyId", null);
             Scribe_Values.Look<float>(ref hungerDuration, "hungerDuration", 300f);
+            Scribe_Values.Look<string>(ref bodyName, "bodyName", "nameless thing");
             Scribe_Collections.Look<BuildingGene>(ref genes, "genes");
         }
 

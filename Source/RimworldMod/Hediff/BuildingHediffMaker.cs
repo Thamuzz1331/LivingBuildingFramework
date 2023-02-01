@@ -12,8 +12,7 @@ namespace Verse
 			BuildingHediff bhediff = (BuildingHediff)Activator.CreateInstance(def.buildingHediffClass);
 			bhediff.def = def;
 			bhediff.comps = new List<BuildingHediffComp>();
-			bhediff.label = def.label;
-			bhediff.visible = def.visible;
+
 			foreach (CompProperties compProp in def.comps)
             {
 				BuildingHediffComp c = (BuildingHediffComp)Activator.CreateInstance(compProp.compClass);

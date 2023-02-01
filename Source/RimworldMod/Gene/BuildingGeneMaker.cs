@@ -1,25 +1,19 @@
 using System;
+using RimWorld;
 
 namespace Verse
 {
 	public static class BuildingGeneMaker
 	{
-		public static BuildingGene MakeBuildingGene(BuildingGeneDef def)
+		public static BuildingGene MakeBuildingGene(BuildingGeneDef def, bool isGeneline = false)
 		{
 			BuildingGene bgene = (BuildingGene)Activator.CreateInstance(def.buildingGeneClass);
 			bgene.def = def;
 			bgene.label = def.label;
+			bgene.geneLineGene = isGeneline;
 			bgene.PostMake();
+			bgene.loadID = Find.UniqueIDsManager.GetNextGeneID();
 			return bgene;
 		}
-
-/*		public static Hediff Debug_MakeConcreteExampleHediff(HediffDef def)
-		{
-			Hediff hediff = (Hediff)Activator.CreateInstance(def.hediffClass);
-			hediff.def = def;
-			hediff.loadID = Find.UniqueIDsManager.GetNextHediffID();
-			hediff.PostMake();
-			return hediff;
-		}*/
 	}
 }

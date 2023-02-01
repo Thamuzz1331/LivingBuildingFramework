@@ -17,7 +17,7 @@ namespace RimWorld
         public BuildingBody body = null;
         public List<BuildingHediff> hediffs = new List<BuildingHediff>();
 
-        public virtual bool HeartSpawned
+        public virtual bool CoreSpawned
         {
             get
             {
@@ -25,11 +25,23 @@ namespace RimWorld
             }
         }
 
+        public virtual CompBuildingCore Core
+        {
+            get
+            {
+                if (this.body == null)
+                {
+                    return null;
+                }
+                return this.body.heart;
+            }
+        }
+
         public virtual bool VisibleHediffs
         {
             get
             {
-                return hediffs.Any(diff => diff.visible);
+                return hediffs.Any(diff => diff.Visible);
             }
         }
 
@@ -80,13 +92,6 @@ namespace RimWorld
             if (body != null && body.heart != null)
             {
                 b.Append("Flesh of " + body.GetName());
-            }
-            foreach(BuildingHediff diff in hediffs)
-            {
-                if (diff.visible)
-                {
-                    b.Append("\nHediff " + diff.ToString());
-                }
             }
             return b.ToString();
         }

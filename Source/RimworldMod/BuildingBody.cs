@@ -70,6 +70,14 @@ namespace RimWorld
         {
             heart = _heart;
             heart.body = this;
+            foreach(BuildingHediff diff in _heart.hediffs)
+            {
+                hediffs.Add(diff);
+                if (diff is Building_Addiction)
+                {
+                    addictions.Add((Building_Addiction)diff);
+                }
+            }
         }
 
         public virtual void Register(CompScaffoldConverter converter)
@@ -89,6 +97,14 @@ namespace RimWorld
             {
                 bodyParts.Add(comp.parent);
                 comp.body = this;
+            }
+            foreach(BuildingHediff diff in comp.hediffs)
+            {
+                hediffs.Add(diff);
+                if (diff is Building_Addiction)
+                {
+                    addictions.Add((Building_Addiction)diff);
+                }
             }
             this.Drawer.SetDirty();
         }

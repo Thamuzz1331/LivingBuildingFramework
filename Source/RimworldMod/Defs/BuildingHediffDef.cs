@@ -15,10 +15,12 @@ namespace Verse
         public Type buildingHediffClass = typeof(BuildingHediff);
         public bool isBad = false;
         public bool visible = true;
-//        [MustTranslate]
-//        public string labelNoun;
-//        [MustTranslate]
-//        public string labelNounPretty;
+        public Color displayColor = Color.white;
+
+        //        [MustTranslate]
+        //        public string labelNoun;
+        //        [MustTranslate]
+        //        public string labelNounPretty;
         public List<CompProperties> comps;
 
         public static BuildingHediffDef Named(string defName)
