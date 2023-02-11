@@ -207,7 +207,7 @@ namespace RimWorld
 					}
 					if (toReplace.TryGetComp<CompScaffold>() != null)
                     {
-						Thing replacement = toReplace.TryGetComp<CompScaffold>().Convert(this);
+						Thing replacement = toReplace.TryGetComp<CompScaffold>().Convert(this, instant);
 						if (replacement != null)
                         {
 							ret.Add(replacement);

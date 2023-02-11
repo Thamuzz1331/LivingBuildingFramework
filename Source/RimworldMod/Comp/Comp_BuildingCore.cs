@@ -14,6 +14,7 @@ namespace RimWorld
         public string bodyName = "nameless thing";
         public float hungerDuration = 0;
         public float hungerThreshold = 300f;
+        public int geneMetabolicCost = 0;
         public List<BuildingGene> genes = new List<BuildingGene>();
 
         public Dictionary<string, float> stats = new Dictionary<string, float>() {
@@ -30,14 +31,15 @@ namespace RimWorld
             Scribe_Values.Look<String>(ref bodyId, "bodyId", null);
             Scribe_Values.Look<float>(ref hungerDuration, "hungerDuration", 300f);
             Scribe_Values.Look<string>(ref bodyName, "bodyName", "nameless thing");
-            Scribe_Collections.Look<BuildingGene>(ref genes, "genes");
+            Scribe_Values.Look<int>(ref geneMetabolicCost, "geneMetabolicCost", 0);
+            Scribe_Collections.Look<BuildingGene>(ref genes, "genes", LookMode.Deep);
         }
 
         public override void PostSpawnSetup(bool respawningAfterLoad)
         {
             if (!respawningAfterLoad)
             {
-                if (bodyId == "NA")
+                if (bodyId == "NA" && parent.Faction == Faction.OfPlayer)
                     bodyId = Guid.NewGuid().ToString();
                 if (parent.TryGetComp<CompScaffoldConverter>() != null)
                 {
@@ -59,12 +61,14 @@ namespace RimWorld
         public virtual void AddGene(BuildingGene b)
         {
             genes.Add(b);
+            this.geneMetabolicCost += b.def.metabolicCost;
             b.PostAdd(this);
         }
 
         public virtual void RemoveGene(BuildingGene b)
         {
             genes.Remove(b);
+            this.geneMetabolicCost -= b.def.metabolicCost;
             b.PostRemove(this);
         }
 
@@ -86,9 +90,9 @@ namespace RimWorld
             }
         }
 
-        public virtual void SetName()
+        public virtual void SetName(string name)
         {
-
+            this.bodyName = name;
         }
 
         public virtual void DoHunger()
@@ -106,6 +110,8 @@ namespace RimWorld
 
             switch (stat)
             {
+                case "metabolicEfficiency" :
+                    return ret * GetMetbolicCost();
                 case "growthEfficiency":
                     return ret * GetStat("metabolicEfficiency");
                 case "growthSpeed":
@@ -113,6 +119,11 @@ namespace RimWorld
                 default:
                     return ret;
             }
+        }
+
+        private float GetMetbolicCost()
+        {
+            return 1f + (0.1f * geneMetabolicCost);
         }
 
         public virtual float GetMultiplier(string mult)

@@ -19,6 +19,11 @@ namespace RimWorld
             if (!respawningAfterLoad)
             {
                 this.currentNutrition = Props.initialNutrition;
+                if (parent.Faction != Faction.OfPlayer)
+                {
+                    this.currentNutrition = Props.nutrientCapacity;
+                }
+
             }
             base.PostSpawnSetup(respawningAfterLoad);
         }

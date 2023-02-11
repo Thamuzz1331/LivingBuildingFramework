@@ -103,7 +103,13 @@ namespace RimWorld
 
 		public float DrawBPHediffs(Rect rect, float curY, CompBuildingBodyPart bp, List<BuildingHediff> hediffs)
         {
-			if (hediffs.Count == 0)
+			List<BuildingHediff> visibleHediffs = new List<BuildingHediff>();
+			foreach(BuildingHediff b in hediffs)
+            {
+				if (b.Visible)
+					visibleHediffs.Add(b);
+            }
+			if (visibleHediffs.Count == 0)
             {
 				return curY;
             }
@@ -115,7 +121,7 @@ namespace RimWorld
 			ITab_Stats.DoRightRowHighlight(highlightRect);
 			Rect bpLabel = new Rect(0, curY, bpLabelWidth, textHeight);
 			Widgets.Label(bpLabel, bp.parent.def.LabelCap);
-			foreach(BuildingHediff diff in hediffs)
+			foreach(BuildingHediff diff in visibleHediffs)
             {
 				float th = Text.CalcHeight(diff.DisplayLabel, diffLabelWidth);
 				Rect diffLabel = new Rect(bpLabelWidth, curY, diffLabelWidth, th);

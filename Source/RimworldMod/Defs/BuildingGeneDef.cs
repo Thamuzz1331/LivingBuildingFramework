@@ -13,7 +13,7 @@ namespace Verse
     public class BuildingGeneDef : Def
     {
         public Type buildingGeneClass = typeof(BuildingGene);
-        public bool isArchoGene = false;
+        public int architeCost = 0;
 		public int complexity = 1;
 		public int metabolicCost = 0;
 		[Unsaved(false)]
