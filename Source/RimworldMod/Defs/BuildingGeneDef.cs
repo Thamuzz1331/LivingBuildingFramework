@@ -20,6 +20,7 @@ namespace Verse
 		private Texture2D cachedIcon;
 		[NoTranslate]
 		public string iconPath;
+		public List<string> tags = new List<string>();
 		public Texture2D Icon
 		{
 			get

@@ -88,6 +88,18 @@ namespace RimWorld
             {
                 yield return gizmo;
             }
+            Command_Action renameBody = new Command_Action
+            {
+                action = delegate
+                {
+                    Find.WindowStack.Add(new Dialog_NameBody(this));
+                },
+                hotKey = KeyBindingDefOf.Misc1,
+                icon = ContentFinder<Texture2D>.Get("UI/Commands/RenameZone"),
+                defaultLabel = TranslatorFormattedStringExtensions.Translate("BodyRename"),
+                defaultDesc = TranslatorFormattedStringExtensions.Translate("BeodyRenameDesc")
+            };
+            yield return renameBody;
         }
 
         public virtual void SetName(string name)

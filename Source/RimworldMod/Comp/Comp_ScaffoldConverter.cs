@@ -181,7 +181,7 @@ namespace RimWorld
 			}
         }
 
-		public virtual List<Thing> ConvertScaffold(bool instant = false)
+		public virtual List<Thing> ConvertScaffold(bool instant = false, bool free = false)
 		{
 			List<Thing> ret = new List<Thing>();
 			if (toConvert.Count <= 0)
@@ -191,7 +191,7 @@ namespace RimWorld
 			int numSpawn = GetNum();
 			for (int i = 0; i < numSpawn; i++)
 			{
-				if (body.RequestNutrition(GetConversionCost())) {
+				if (free || body.RequestNutrition(GetConversionCost())) {
 					Thing toReplace = null;
 					bool searching = true;
 					while (searching)
@@ -254,11 +254,10 @@ namespace RimWorld
 				    defaultLabel = "DEBUG: Grow All",
 				    action = delegate()
 				    {
-						bool remaining = true;
+						bool remaining = (toConvert.Count > 0);
 						while (remaining)
                         {
-							ConvertScaffold();
-							remaining = (toConvert.Count > 0);
+							remaining = (0 != ConvertScaffold(true, true).Count);
                         }
 				    }
 			    };

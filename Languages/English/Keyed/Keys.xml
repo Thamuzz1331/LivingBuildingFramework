@@ -9,4 +9,6 @@
 	<metabolicSpeed>Metabolic Speed</metabolicSpeed>
 	<growthEfficiency>Growth Efficiency</growthEfficiency>
 	<growthSpeed>Growth Speed</growthSpeed>
+	<BodyRename>Rename Body</BodyRename>
+	<BeodyRenameDesc>Change the name of this building body.</BeodyRenameDesc>
 </LanguageData>
