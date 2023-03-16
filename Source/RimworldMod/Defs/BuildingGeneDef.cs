@@ -21,6 +21,7 @@ namespace Verse
 		[NoTranslate]
 		public string iconPath;
 		public List<string> tags = new List<string>();
+		public List<string> geneOverrides = new List<string>();
 		public Texture2D Icon
 		{
 			get

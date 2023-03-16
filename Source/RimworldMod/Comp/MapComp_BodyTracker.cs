@@ -40,7 +40,7 @@ namespace RimWorld
 
         public void Register(CompBuildingBodyPart comp)
         {
-            BuildingBody body = bodies.TryGetValue(comp.bodyId);
+            BuildingBody body = bodies.TryGetValue(comp.bodyId, null);
             if (body == null)
             {
                 body = new BuildingBody();

@@ -10,12 +10,9 @@ namespace RimWorld
 {
 	public class CompScaffoldConverter : ThingComp
 	{
-		public static HashSet<Thing> claimed = new HashSet<Thing>();
-
 		public CompProperties_ScaffoldConverter Props => (CompProperties_ScaffoldConverter)props;
 
-		public List<Thing> convertList = new List<Thing>();
-		public Queue<Thing> toConvert = new Queue<Thing>();
+		public List<Thing> toConvert = new List<Thing>();
 
 		public string bodyId = null;
 		public BuildingBody body = null;
@@ -43,17 +40,13 @@ namespace RimWorld
 
 		private float ticksToConversion;
 
-		public float AgeDays => (float)age / 60000f;
-
 		public override void PostExposeData()
 		{
 			base.PostExposeData();
 			Scribe_Values.Look(ref bodyId, "bodyId", "");
 			Scribe_Values.Look(ref age, "age", 0);
 			Scribe_Values.Look(ref ticksToConversion, "ticksToConversion", 0);
-			convertList = toConvert.ToList();
-			Scribe_Collections.Look<Thing>(ref convertList, "convertList", LookMode.Reference);
-			toConvert = new Queue<Thing>(convertList);
+			Scribe_Collections.Look<Thing>(ref toConvert, "toConvert", LookMode.Reference);
 		}
 
 		public override void PostSpawnSetup(bool respawningAfterLoad)
@@ -98,7 +91,7 @@ namespace RimWorld
 			if (t.TryGetComp<CompScaffold>() != null 
 				&& !t.TryGetComp<CompScaffold>().transforming)
             {
-				toConvert.Enqueue(t);
+				toConvert.Add(t);
             }
 		}
 
@@ -198,8 +191,8 @@ namespace RimWorld
 					{
 						if (toConvert.Count <= 0)
 							return ret;
-						toReplace = toConvert.Dequeue();
-						claimed.Remove(toReplace);
+						toReplace = toConvert.First();
+						toConvert.Remove(toReplace);
 						if (toReplace.TryGetComp<CompScaffold>() != null && !toReplace.Destroyed && !toReplace.TryGetComp<CompScaffold>().transforming)
 						{
 							searching = false;

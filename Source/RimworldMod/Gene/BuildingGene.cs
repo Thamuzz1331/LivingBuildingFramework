@@ -45,7 +45,6 @@ namespace Verse
 			}
 		}
 
-
 		void IExposable.ExposeData()
 		{
 			Scribe_Defs.Look(ref def, "def");
@@ -61,7 +60,7 @@ namespace Verse
 		}
 		public virtual void PostExposeData()
 		{
-
+			
 		}
 		public virtual void PostAdd(CompBuildingCore core)
 		{
@@ -88,7 +87,7 @@ namespace Verse
 		}
 		public virtual bool OverridesGene(BuildingGene b)
         {
-			return false;
+			return this.def.geneOverrides.Contains(b.def.defName);
         }
 	}
 }
