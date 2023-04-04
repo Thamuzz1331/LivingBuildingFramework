@@ -50,7 +50,7 @@ namespace RimWorld
 
 		public bool bodyOverlayToggle;
 
-		public static readonly Texture2D toggleButton = ContentFinder<Texture2D>.Get("ToggleButton", true);
+		public static readonly Texture2D toggleButton = ContentFinder<Texture2D>.Get("UI_Elements/ShowBodyOverlay", true);
 
 		private static BodyOverlayHandler current;
 	}

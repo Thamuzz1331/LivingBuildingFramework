@@ -1,16 +1,17 @@
 {
   "ExpandedNodes": [
     "",
-    "\\About",
     "\\Languages",
     "\\Languages\\English",
     "\\Languages\\English\\Keyed",
     "\\Source",
     "\\Source\\RimworldMod",
     "\\Source\\RimworldMod\\Comp",
+    "\\Source\\RimworldMod\\Defs",
+    "\\Source\\RimworldMod\\Gene",
     "\\Source\\RimworldMod\\Graphics",
     "\\Source\\RimworldMod\\Hediff"
   ],
-  "SelectedNode": "\\Source\\RimworldMod\\Comp\\Comp_NutritionStore.cs",
+  "SelectedNode": "\\Source\\RimworldMod\\Defs\\BuildingGeneDef.cs",
   "PreviewInSolutionExplorer": false
 }
