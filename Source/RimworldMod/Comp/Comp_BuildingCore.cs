@@ -79,6 +79,7 @@ namespace RimWorld
 
         public override void PostDeSpawn(Map map)
         {
+            ((MapCompBuildingTracker)map.components.Where(t => t is MapCompBuildingTracker).FirstOrDefault()).Terminate(this.bodyId);
             base.PostDeSpawn(map);
         }
 
@@ -141,6 +142,13 @@ namespace RimWorld
         public virtual float GetMultiplier(string mult)
         {
             return multipliers.TryGetValue(mult, 1f);
+        }
+
+        public virtual float GetPassiveConsumptions()
+        {
+
+            float metabolicOffset = 1f;
+            return (0.025f*(body.bodyParts.Count + 25))/metabolicOffset;
         }
     }
 }

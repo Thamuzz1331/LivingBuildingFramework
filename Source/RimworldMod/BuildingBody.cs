@@ -27,6 +27,7 @@ namespace RimWorld
         public float nutritionCapacity = 0;
         public float passiveConsumption = 0;
         public float nutritionGen = 0;
+        public bool dirty = false;
 
         public BodyOverlayDrawer Drawer
 		{
@@ -150,6 +151,7 @@ namespace RimWorld
         {
             bodyParts.Remove(comp.parent);
             drawer.SetDirty();
+            this.dirty = true;
             //comp.body = null;
         }
         public virtual void DeRegister(CompNutrition comp)
@@ -170,6 +172,44 @@ namespace RimWorld
                 source.Add((CompNutritionSource)comp);
                 nutritionGen += ((CompNutritionSource)comp).getNutritionPerPulse();
             }
+        }
+
+        public virtual void DeRegister(CompScaffold scaff)
+        {
+            transformingScaff.Remove(scaff);
+            scaff.bodyId = null;
+            scaff.body = null;
+            scaff.converter = null;
+            scaff.transforming = false;
+        }
+
+        public virtual void DeRegisterAllBodyparts()
+        {
+            Thing[] bodyPartsCopy = new Thing[this.bodyParts.Count];
+            this.bodyParts.CopyTo(bodyPartsCopy);
+            foreach(Thing t in bodyPartsCopy)
+            {
+                t.TryGetComp<CompBuildingBodyPart>()?.Detatch();
+            }
+        }
+
+        public virtual void DeRegisterAllScaffolds()
+        {
+            foreach(CompScaffold scaff in this.transformingScaff)
+            {
+                scaff.bodyId = null;
+                scaff.body = null;
+                scaff.converter = null;
+                scaff.transforming = false;
+            }
+            this.transformingScaff = new HashSet<CompScaffold>();
+        }
+
+        public virtual void TerminateBody()
+        {
+            DeRegisterAllScaffolds();
+            DeRegisterAllBodyparts();
+            this.heart = null;
         }
 
         public virtual void DeRegisterAddictionSupplier(CompAddictionSupplier addictionSupplier)
@@ -203,7 +243,7 @@ namespace RimWorld
             {
                 metabolicOffset = heart.GetStat("metabolcEfficiency");
             }
-            passiveConsumption = (0.05f*(bodyParts.Count + 150))/metabolicOffset;
+            passiveConsumption = heart.GetPassiveConsumptions();
             foreach (CompNutritionConsumer c in consumers)
             {
                 passiveConsumption += c.getConsumptionPerPulse();
@@ -354,6 +394,77 @@ namespace RimWorld
                 } else
                 {
                     addiction.withdrawl += addiction.withdrawRate * ticks;
+                }
+            }
+        }
+
+        public virtual void BodyDetectionPulse()
+        {
+            if (!this.dirty || this.heart == null)
+            {
+                return;
+            }
+            Map coreMap = this.heart.parent.Map;
+            HashSet<Thing> seenBodyParts = new HashSet<Thing>();
+            HashSet<Thing> detatchedParts = new HashSet<Thing>();
+            seenBodyParts.Add(this.heart.parent);
+            foreach(IntVec3 footprint in GenAdj.CellsOccupiedBy(this.heart.parent))
+            {
+                foreach(Thing t in footprint.GetThingList(coreMap))
+                {
+                    if (t.TryGetComp<CompBuildingBodyPart>()?.bodyId == this.heart.bodyId)
+                    {
+                        seenBodyParts.Add(t);
+                        RecursiveSeen(t, ref seenBodyParts);
+                    }
+                }
+            }
+            foreach(Thing t in bodyParts.Where((s) => !seenBodyParts.Contains(s)))
+            {
+                detatchedParts.Add(t);
+            }
+            foreach(Thing t in detatchedParts)
+            {
+                t.TryGetComp<CompBuildingBodyPart>()?.Detatch();
+            }
+            HashSet<CompScaffold> removeScaff = new HashSet<CompScaffold>();
+            foreach (CompScaffold scaff in this.transformingScaff)
+            {
+                bool remove = true;
+                foreach (IntVec3 adj in GenAdj.CellsAdjacentCardinal(scaff.parent))
+                {
+                    foreach(Thing t in adj.GetThingList(scaff.parent.Map))
+                    {
+                        if (t.TryGetComp<CompBuildingBodyPart>()?.bodyId == scaff.bodyId)
+                        {
+                            remove = false;
+                            break;
+                        }
+                    }
+                    if (remove)
+                    {
+                        removeScaff.Add(scaff);
+                    }
+                }
+            }
+            foreach (CompScaffold scaff in removeScaff)
+            {
+                this.DeRegister(scaff);
+            }
+            this.scaffoldConverter?.CullToConvert();
+            this.dirty = false;
+        }
+
+        public virtual void RecursiveSeen(Thing toCheck, ref HashSet<Thing> seen)
+        {
+            foreach(IntVec3 adj in GenAdj.CellsAdjacentCardinal(toCheck)) {
+                foreach(Thing t in adj.GetThingList(toCheck.Map))
+                {
+                    if (!seen.Contains(t) && t.TryGetComp<CompBuildingBodyPart>()?.bodyId == this.heart.bodyId)
+                    {
+                        seen.Add(t);
+                        RecursiveSeen(t, ref seen);
+                    }
                 }
             }
         }

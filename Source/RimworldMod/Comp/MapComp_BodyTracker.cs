@@ -82,37 +82,44 @@ namespace RimWorld
             body.Register(scaff);
         }
 
+        public void Terminate(string bodyId)
+        {
+            BuildingBody body = bodies.TryGetValue(bodyId);
+            if (body != null)
+            {
+                body.TerminateBody();
+                this.bodies.Remove(bodyId);
+            }
+        }
+
         public override void MapComponentTick()
         {
             base.MapComponentTick();
             bool nutritionTick = curTick % 120 == 0;
-            foreach (string b in bodies.Keys)
+            bool bodyPulseTick = curTick % 1000 == 0;
+            foreach (BuildingBody b in bodies.Values)
             {
                 if (nutritionTick)
                 {
-                    bodies.TryGetValue(b).RunNutrition(120f);
+                    b.RunNutrition(120f);
                 }
-                foreach(BuildingHediff diff in bodies.TryGetValue(b).hediffs)
+                if (bodyPulseTick)
+                {
+                    b.BodyDetectionPulse();
+                }
+                foreach(BuildingHediff diff in b.hediffs)
                 {
                     diff.Tick();
                 }
-                bodies.TryGetValue(b).RunAddictions(1f);
-                List<CompScaffold> toRemove = new List<CompScaffold>();
-                foreach(CompScaffold scaff in bodies.TryGetValue(b).transformingScaff)
+                b.RunAddictions(1f);
+                CompScaffold[] scaffs = new CompScaffold[b.transformingScaff.Count];
+                b.transformingScaff.CopyTo(scaffs);
+                foreach(CompScaffold scaff in scaffs)
                 {
-                    if (scaff.parent.Destroyed)
-                    {
-                        toRemove.Add(scaff);
-                    } else
-                    {
-                        scaff.BodyTick();
-                    }
-                }
-                foreach(CompScaffold scaff in toRemove)
-                {
-                    bodies.TryGetValue(b).transformingScaff.Remove(scaff);
+                    scaff.BodyTick();
                 }
             }
+
             curTick++;
         }
     }

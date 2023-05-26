@@ -55,6 +55,7 @@ namespace RimWorld
                             if (flesh != null && flesh.Props.species == this.Props.species)
                             {
                                 flesh.AddScaff(parent);
+                                break;
                             }
                         }
                     }
@@ -65,7 +66,16 @@ namespace RimWorld
             }
         }
 
-		public virtual ThingDef GetConversionDef(CompScaffoldConverter converter)
+        public override void PostDeSpawn(Map map)
+        {
+           if (this.body != null)
+            {
+                this.body.DeRegister(this);
+            }
+           base.PostDeSpawn(map);
+        }
+
+        public virtual ThingDef GetConversionDef(CompScaffoldConverter converter)
         {
 			return ThingDef.Named(Props.transformString);
         }

@@ -81,9 +81,9 @@ namespace RimWorld
 
         public override void PostDeSpawn(Map map)
         {
-            base.PostDeSpawn(map);
             if (body != null)
                 body.DeRegister(this);
+            base.PostDeSpawn(map);
         }
 
         public override string CompInspectStringExtra()
@@ -165,6 +165,10 @@ namespace RimWorld
             {
                 RemoveHediff(diff);
             }
+        }
+
+        public virtual void Detatch()
+        {
         }
 
     }

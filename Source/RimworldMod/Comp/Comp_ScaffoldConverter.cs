@@ -13,6 +13,7 @@ namespace RimWorld
 		public CompProperties_ScaffoldConverter Props => (CompProperties_ScaffoldConverter)props;
 
 		public List<Thing> toConvert = new List<Thing>();
+		public HashSet<Thing> inToConvert = new HashSet<Thing>();
 
 		public string bodyId = null;
 		public BuildingBody body = null;
@@ -47,6 +48,7 @@ namespace RimWorld
 			Scribe_Values.Look(ref age, "age", 0);
 			Scribe_Values.Look(ref ticksToConversion, "ticksToConversion", 0);
 			Scribe_Collections.Look<Thing>(ref toConvert, "toConvert", LookMode.Reference);
+			inToConvert.AddRange(toConvert);
 		}
 
 		public override void PostSpawnSetup(bool respawningAfterLoad)
@@ -88,10 +90,12 @@ namespace RimWorld
 
 		public virtual void AddToConvert(Thing t)
         {
-			if (t.TryGetComp<CompScaffold>() != null 
+			if (!inToConvert.Contains(t) 
+				&& t.TryGetComp<CompScaffold>() != null 
 				&& !t.TryGetComp<CompScaffold>().transforming)
             {
 				toConvert.Add(t);
+				inToConvert.Add(t);
             }
 		}
 
@@ -134,7 +138,7 @@ namespace RimWorld
 
 		public virtual void EnqueueSurrounding(Thing t)
         {
-			foreach(IntVec3 c in GenAdjFast.AdjacentCells8Way(t.Position))
+			foreach(IntVec3 c in GenAdjFast.AdjacentCellsCardinal(t.Position).InRandomOrder())
             {
 				foreach (Thing adj in c.GetThingList(parent.Map))
 				{
@@ -193,6 +197,7 @@ namespace RimWorld
 							return ret;
 						toReplace = toConvert.First();
 						toConvert.Remove(toReplace);
+						inToConvert.Remove(toReplace);
 						if (toReplace.TryGetComp<CompScaffold>() != null && !toReplace.Destroyed && !toReplace.TryGetComp<CompScaffold>().transforming)
 						{
 							searching = false;
@@ -212,7 +217,7 @@ namespace RimWorld
 			return ret;
 		}
 
-		//This is terrible, replace.
+		//TODO: This is terrible, replace.
 		public virtual int GetNum()
         {
 			int ret = Rand.Range(1, 20);
@@ -227,11 +232,6 @@ namespace RimWorld
 				ret = 1;
             }
 			return ret;
-        }
-
-		public virtual List<TerrainDef> GetTerrains()
-        {
-			return new List<TerrainDef>();
         }
 
 		public override IEnumerable<Gizmo> CompGetGizmosExtra()
@@ -256,6 +256,32 @@ namespace RimWorld
 			    };
 			}
 		}
+
+		public virtual void CullToConvert()
+        {
+			Thing[] toCheck = new Thing[toConvert.Count];
+			toConvert.CopyTo(toCheck);
+			foreach(Thing c in toCheck)
+            {
+				bool remove = true;
+                foreach (IntVec3 adj in GenAdj.CellsAdjacentCardinal(c))
+                {
+                    foreach(Thing t in adj.GetThingList(c.Map))
+                    {
+                        if (t.TryGetComp<CompBuildingBodyPart>()?.bodyId == this.bodyId)
+                        {
+                            remove = false;
+                            break;
+                        }
+                    }
+					if (remove)
+                    {
+						toConvert.Remove(c);
+						inToConvert.Remove(c);
+                    }
+				}
+			}
+        }
 
 	}
 	
