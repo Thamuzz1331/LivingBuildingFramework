@@ -82,12 +82,12 @@ namespace RimWorld
             body.Register(scaff);
         }
 
-        public void Terminate(string bodyId)
+        public void Terminate(string bodyId, DestroyMode mode, Map previousMap)
         {
             BuildingBody body = bodies.TryGetValue(bodyId);
             if (body != null)
             {
-                body.TerminateBody();
+                body.TerminateBody(mode, previousMap);
                 this.bodies.Remove(bodyId);
             }
         }

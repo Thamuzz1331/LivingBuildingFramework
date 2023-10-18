@@ -85,8 +85,20 @@ namespace Verse
 		{
 
 		}
+		public virtual IEnumerable<Gizmo> GeneGetGizmosExtra()
+		{
+			return new List<Gizmo>();
+		}
+
 		public virtual bool OverridesGene(BuildingGene b)
         {
+			foreach(String tag in b.def.tags)
+            {
+				if (this.def.geneOverridesTags.Contains(tag))
+                {
+					return true;
+                }
+            }
 			return this.def.geneOverrides.Contains(b.def.defName);
         }
 	}

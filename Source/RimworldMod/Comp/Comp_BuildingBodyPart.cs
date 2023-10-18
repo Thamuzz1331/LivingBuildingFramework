@@ -167,7 +167,7 @@ namespace RimWorld
             }
         }
 
-        public virtual void Detatch()
+        public virtual void Detatch(DestroyMode mode, Map previousMap)
         {
         }
 

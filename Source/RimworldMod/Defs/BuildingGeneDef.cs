@@ -30,6 +30,17 @@ namespace Verse
                     }
                 }
             }
+			if (this.geneOverridesTags != null && other.geneOverridesTags != null
+				&& this.tags != null)
+            {
+				for (int i = 0; i < this.geneOverridesTags.Count; i++)
+                {
+					if (other.tags.Contains(this.geneOverridesTags[i]))
+                    {
+						return true;
+                    }
+                }
+            }
             return false;
         }
 
@@ -108,7 +119,7 @@ namespace Verse
 		public string iconPath;
 		public List<string> tags = new List<string>();
 		public List<string> geneOverrides = new List<string>();
-
+		public List<string> geneOverridesTags = new List<string>();
     }
 
 	public static class BuildingGeneUtils

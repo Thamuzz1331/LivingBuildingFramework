@@ -77,10 +77,10 @@ namespace RimWorld
             base.CompTick();
         }
 
-        public override void PostDeSpawn(Map map)
+        public override void PostDestroy(DestroyMode mode, Map previousMap)
         {
-            ((MapCompBuildingTracker)map.components.Where(t => t is MapCompBuildingTracker).FirstOrDefault()).Terminate(this.bodyId);
-            base.PostDeSpawn(map);
+            ((MapCompBuildingTracker)previousMap.components.Where(t => t is MapCompBuildingTracker).FirstOrDefault()).Terminate(this.bodyId, mode, previousMap);
+            base.PostDestroy(mode, previousMap);
         }
 
         public override IEnumerable<Gizmo> CompGetGizmosExtra()
@@ -101,6 +101,13 @@ namespace RimWorld
                 defaultDesc = TranslatorFormattedStringExtensions.Translate("BeodyRenameDesc")
             };
             yield return renameBody;
+            foreach (BuildingGene g in genes)
+            {
+                foreach (Gizmo genegizmo in g.GeneGetGizmosExtra())
+                {
+                    yield return genegizmo;
+                }
+            }
         }
 
         public virtual void SetName(string name)
@@ -150,5 +157,6 @@ namespace RimWorld
             float metabolicOffset = 1f;
             return (0.025f*(body.bodyParts.Count + 25))/metabolicOffset;
         }
+
     }
 }

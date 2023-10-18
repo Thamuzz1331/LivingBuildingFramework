@@ -183,13 +183,13 @@ namespace RimWorld
             scaff.transforming = false;
         }
 
-        public virtual void DeRegisterAllBodyparts()
+        public virtual void DeRegisterAllBodyparts(DestroyMode mode, Map previousMap)
         {
             Thing[] bodyPartsCopy = new Thing[this.bodyParts.Count];
             this.bodyParts.CopyTo(bodyPartsCopy);
             foreach(Thing t in bodyPartsCopy)
             {
-                t.TryGetComp<CompBuildingBodyPart>()?.Detatch();
+                t.TryGetComp<CompBuildingBodyPart>()?.Detatch(mode, previousMap);
             }
         }
 
@@ -205,10 +205,10 @@ namespace RimWorld
             this.transformingScaff = new HashSet<CompScaffold>();
         }
 
-        public virtual void TerminateBody()
+        public virtual void TerminateBody(DestroyMode mode, Map previousMap)
         {
             DeRegisterAllScaffolds();
-            DeRegisterAllBodyparts();
+            DeRegisterAllBodyparts(mode, previousMap);
             this.heart = null;
         }
 
@@ -425,7 +425,7 @@ namespace RimWorld
             }
             foreach(Thing t in detatchedParts)
             {
-                t.TryGetComp<CompBuildingBodyPart>()?.Detatch();
+                t.TryGetComp<CompBuildingBodyPart>()?.Detatch(DestroyMode.KillFinalize, null);
             }
             HashSet<CompScaffold> removeScaff = new HashSet<CompScaffold>();
             foreach (CompScaffold scaff in this.transformingScaff)
