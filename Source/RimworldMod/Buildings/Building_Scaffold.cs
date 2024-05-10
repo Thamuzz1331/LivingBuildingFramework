@@ -13,9 +13,9 @@ namespace RimWorld
     {
         CompScaffold scaffold;
         Graphic g;
-        public override void Draw()
+        protected override void DrawAt(Vector3 drawLoc, bool flip = false)
         {
-            base.Draw();
+            base.DrawAt(drawLoc, flip);
             if (scaffold == null)
             {
                 scaffold = this.TryGetComp<CompScaffold>();

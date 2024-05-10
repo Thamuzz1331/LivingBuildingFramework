@@ -1,17 +1,16 @@
 {
   "ExpandedNodes": [
     "",
-    "\\Languages",
-    "\\Languages\\English",
-    "\\Languages\\English\\Keyed",
+    "\\1.4",
+    "\\1.4\\Assemblies",
+    "\\About",
     "\\Source",
     "\\Source\\RimworldMod",
-    "\\Source\\RimworldMod\\Comp",
     "\\Source\\RimworldMod\\Defs",
     "\\Source\\RimworldMod\\Gene",
     "\\Source\\RimworldMod\\Graphics",
     "\\Source\\RimworldMod\\Hediff"
   ],
-  "SelectedNode": "\\Source\\RimworldMod\\Defs\\BuildingGeneDef.cs",
+  "SelectedNode": "\\Source\\RimworldMod\\Graphics\\Dialog_RenameBody.cs",
   "PreviewInSolutionExplorer": false
 }

@@ -27,8 +27,9 @@ namespace RimWorld
             base.MapRemoved();
         }
 
-        public void Register(CompBuildingCore core)
+        public void RegisterCore(CompBuildingCore core)
         {
+            Log.Message("Registering " + core.bodyId);
             BuildingBody body = bodies.TryGetValue(core.bodyId);
             if (body == null)
             {
@@ -40,6 +41,7 @@ namespace RimWorld
 
         public void Register(CompBuildingBodyPart comp)
         {
+            Log.Message("Registering Part " + comp.bodyId);
             BuildingBody body = bodies.TryGetValue(comp.bodyId, null);
             if (body == null)
             {

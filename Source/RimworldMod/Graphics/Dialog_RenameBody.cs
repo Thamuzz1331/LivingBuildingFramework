@@ -7,22 +7,15 @@ using RimWorld;
 
 namespace RimWorld
 {
-    public class Dialog_NameBody : Dialog_Rename
+    public class Dialog_NameBody : Dialog_Rename<CompBuildingCore>
     {
         private CompBuildingCore core;
 
-        public Dialog_NameBody(CompBuildingCore b)
+        public Dialog_NameBody(CompBuildingCore b) : base(b)
         {
             this.core = b;
             curName = b.bodyName;
         }
 
-        protected override void SetName(string name)
-        {
-            if (name == core.bodyName || string.IsNullOrEmpty(name))
-                return;
-
-            core.bodyName = name;
-        }
     }
 }

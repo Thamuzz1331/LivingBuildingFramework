@@ -59,7 +59,7 @@ namespace RimWorld
 
         public override void PostSpawnSetup(bool respawningAfterLoad)
         {
-            ((MapCompBuildingTracker)this.parent.Map.components.Where(t => t is MapCompBuildingTracker).FirstOrDefault()).Register(this);
+            DoRegister();
             foreach (IntVec3 r in GenAdj.CellsOccupiedBy(parent))
             {
                 List<IntVec3> adjSpaces = GenAdjFast.AdjacentCellsCardinal(r);
@@ -77,6 +77,11 @@ namespace RimWorld
                     }
                 }
             }
+        }
+
+        public virtual void DoRegister()
+        {
+            ((MapCompBuildingTracker)this.parent.Map.components.Where(t => t is MapCompBuildingTracker).FirstOrDefault()).Register(this);
         }
 
         public override void PostDeSpawn(Map map)

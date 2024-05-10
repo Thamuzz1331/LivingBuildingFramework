@@ -8,7 +8,7 @@ using Verse;
 
 namespace RimWorld
 {
-    public class CompBuildingCore : CompBuildingBodyPart
+    public class CompBuildingCore : CompBuildingBodyPart, IRenameable
     {
         public CompProperties_BuildingCore CoreProps => (CompProperties_BuildingCore)props;
         public string bodyName = "nameless thing";
@@ -16,6 +16,28 @@ namespace RimWorld
         public float hungerThreshold = 300f;
         public int geneMetabolicCost = 0;
         public List<BuildingGene> genes = new List<BuildingGene>();
+
+        string IRenameable.RenamableLabel { 
+            get {
+                return bodyName;
+            }
+            set
+            {
+                bodyName = value;
+            } 
+        }
+		string IRenameable.BaseLabel { 
+            get
+            {
+                return bodyName;
+            } 
+        }
+		string IRenameable.InspectLabel { 
+            get
+            {
+                return bodyName;
+            } 
+        }
 
         public Dictionary<string, float> stats = new Dictionary<string, float>() {
             {"metabolicEfficiency", 1f},
@@ -56,6 +78,11 @@ namespace RimWorld
             {
                 g.PostSpawnSetup(respawningAfterLoad);
             }
+        }
+
+        public override void DoRegister()
+        {
+            ((MapCompBuildingTracker)this.parent.Map.components.Where(t => t is MapCompBuildingTracker).FirstOrDefault()).RegisterCore(this);
         }
 
         public virtual void AddGene(BuildingGene b)
