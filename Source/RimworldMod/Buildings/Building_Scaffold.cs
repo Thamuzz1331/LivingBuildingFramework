@@ -9,10 +9,10 @@ using LivingBuildings;
 namespace RimWorld
 {
     [StaticConstructorOnStartup]
-    class Building_Scaffold : Building
+    public class Building_Scaffold : Building
     {
-        CompScaffold scaffold;
-        Graphic g;
+        public CompScaffold scaffold;
+        public Graphic g;
         protected override void DrawAt(Vector3 drawLoc, bool flip = false)
         {
             base.DrawAt(drawLoc, flip);

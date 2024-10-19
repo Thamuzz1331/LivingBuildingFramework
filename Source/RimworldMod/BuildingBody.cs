@@ -277,6 +277,7 @@ namespace RimWorld
             net = net / (60000f/ticks);
             if (net > 0)
             {
+                heart.hungerDuration = 0;
                 float toStore = net * 0.5f;
                 float leftover = 0;
                 if ((nutritionCapacity - currentNutrition) <= 0)
@@ -296,7 +297,7 @@ namespace RimWorld
                     leftover = StoreNutrition(stores, toStore, 0);
                 }
             }
-            if (net < 0)
+            if (net <= 0)
             {
                 net = net * -1;
                 if (net > this.currentNutrition)
