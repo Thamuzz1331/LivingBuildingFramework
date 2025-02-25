@@ -264,23 +264,31 @@ namespace RimWorld
 			foreach(Thing c in toCheck)
             {
 				bool remove = true;
-                foreach (IntVec3 adj in GenAdj.CellsAdjacentCardinal(c))
-                {
-                    foreach(Thing t in adj.GetThingList(c.Map))
-                    {
-                        if (t.TryGetComp<CompBuildingBodyPart>()?.bodyId == this.bodyId)
-                        {
-                            remove = false;
-                            break;
-                        }
-                    }
-					if (remove)
-                    {
-						toConvert.Remove(c);
-						inToConvert.Remove(c);
-                    }
-				}
-			}
+				if (c == null)
+				{
+					toConvert.Remove(c);
+                    inToConvert.Remove(c);
+                }
+                else
+				{
+					foreach (IntVec3 adj in GenAdj.CellsAdjacentCardinal(c))
+					{
+						foreach(Thing t in adj.GetThingList(c.Map))
+						{
+							if (t.TryGetComp<CompBuildingBodyPart>()?.bodyId == this.bodyId)
+							{
+								remove = false;
+								break;
+							}
+						}
+						if (remove)
+						{
+							toConvert.Remove(c);
+							inToConvert.Remove(c);
+						}
+					}
+                }
+            }
         }
 
 	}

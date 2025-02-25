@@ -60,7 +60,7 @@
 		<Private>False</Private>
 	</Reference>
 	<Reference Include="1SettingsHelper">
-		<HintPath>C:\Users\Alexander\git\SettingsHelper\Assemblies\1SettingsHelper.dll</HintPath>
+		<HintPath>D:\Users\Alexander\git\SettingsHelper\Assemblies\1SettingsHelper.dll</HintPath>
 		<Private>False</Private>
 	</Reference>
 	<Reference Include="System" />

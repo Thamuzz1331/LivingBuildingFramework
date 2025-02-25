@@ -266,7 +266,7 @@ namespace RimWorld
             {
                 return;
             }
-            if (heart.hungerDuration > heart.hungerThreshold)
+            if (heart.hungerDuration > heart.hungerThreshold && currentNutrition <= 0)
             {
                 heart.DoHunger();
             }

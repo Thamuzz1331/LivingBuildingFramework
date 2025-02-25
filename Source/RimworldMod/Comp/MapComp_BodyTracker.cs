@@ -29,7 +29,7 @@ namespace RimWorld
 
         public void RegisterCore(CompBuildingCore core)
         {
-            Log.Message("Registering " + core.bodyId);
+//            Log.Message("Registering " + core.bodyId);
             BuildingBody body = bodies.TryGetValue(core.bodyId);
             if (body == null)
             {
@@ -41,7 +41,7 @@ namespace RimWorld
 
         public void Register(CompBuildingBodyPart comp)
         {
-            Log.Message("Registering Part " + comp.bodyId);
+//            Log.Message("Registering Part " + comp.bodyId);
             BuildingBody body = bodies.TryGetValue(comp.bodyId, null);
             if (body == null)
             {
@@ -109,7 +109,7 @@ namespace RimWorld
                 {
                     b.BodyDetectionPulse();
                 }
-                foreach(BuildingHediff diff in b.hediffs)
+                foreach (BuildingHediff diff in b.hediffs)
                 {
                     diff.Tick();
                 }
