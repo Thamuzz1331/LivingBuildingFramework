@@ -84,7 +84,7 @@ namespace RimWorld
             ((MapCompBuildingTracker)this.parent.Map.components.Where(t => t is MapCompBuildingTracker).FirstOrDefault()).Register(this);
         }
 
-        public override void PostDeSpawn(Map map)
+        public override void PostDeSpawn(Map map, DestroyMode mode = DestroyMode.Vanish)
         {
             if (body != null)
                 body.DeRegister(this);
@@ -169,6 +169,36 @@ namespace RimWorld
             foreach(BuildingHediff diff in toRemove)
             {
                 RemoveHediff(diff);
+            }
+        }
+
+        public virtual void RepairAdjacent()
+        {
+            foreach (IntVec3 r in GenAdj.CellsOccupiedBy(parent))
+            {
+                HashSet<CompBuildingBodyPart> fixedBps = new HashSet<CompBuildingBodyPart>();
+                List<IntVec3> adjSpaces = GenAdjFast.AdjacentCellsCardinal(r);
+                foreach (IntVec3 c in adjSpaces)
+                {
+                    foreach (Thing adj in c.GetThingList(parent.Map))
+                    {
+                        CompBuildingBodyPart bp = adj.TryGetComp<CompBuildingBodyPart>();
+                        if (bp != null)
+                        {
+                            if (bp.bodyId == "NA")
+                            {
+                                bp.bodyId = this.bodyId;
+                                bp.body.DeRegister(bp);
+                                bp.DoRegister();
+                                fixedBps.Add(bp);
+                            }
+                        }
+                    }
+                }
+                foreach (CompBuildingBodyPart bp in fixedBps)
+                {
+                    bp.RepairAdjacent();
+                }
             }
         }
 

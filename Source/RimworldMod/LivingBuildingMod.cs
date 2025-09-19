@@ -23,7 +23,7 @@ namespace LivingBuildings
 		[HarmonyPostfix]
 		public static void PostFix()
 		{
-			bool flag = BodyOverlayHandler.Instance.bodyOverlayToggle && Find.CurrentMap != null && !WorldRendererUtility.WorldRenderedNow;
+			bool flag = BodyOverlayHandler.Instance.bodyOverlayToggle && Find.CurrentMap != null && !WorldRendererUtility.WorldRendered;
 			if (flag)
 			{
 				BodyOverlayHandler.Instance.UpdateBodyOverlay();

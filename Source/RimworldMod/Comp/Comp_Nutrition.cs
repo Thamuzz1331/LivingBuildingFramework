@@ -29,7 +29,7 @@ namespace RimWorld
             Scribe_Values.Look<String>(ref bodyId, "bodyId", "NA");
         }
 
-        public override void PostDeSpawn(Map map)
+        public override void PostDeSpawn(Map map, DestroyMode mode = DestroyMode.Vanish)
         {
             base.PostDeSpawn(map);
             if (body != null)

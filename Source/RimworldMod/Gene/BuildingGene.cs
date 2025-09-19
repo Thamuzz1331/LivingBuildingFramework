@@ -54,7 +54,7 @@ namespace Verse
 			Scribe_References.Look<BuildingGene>(ref this.overriddenByGene, "overriddenByGene", false);
 			PostExposeData();
 		}
-		public virtual void PostSpawnSetup(bool respawningAfterLoad)
+		public virtual void PostSpawnSetup(bool respawningAfterLoad, CompBuildingCore core)
 		{
 
 		}

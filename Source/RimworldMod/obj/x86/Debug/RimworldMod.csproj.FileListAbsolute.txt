@@ -14,3 +14,5 @@ K:\SteamLibrary\steamapps\common\RimWorld\Mods\LivingBuildingFramework\Source\Ri
 K:\SteamLibrary\steamapps\common\RimWorld\Mods\LivingBuildingFramework\Source\RimworldMod\obj\x86\Debug\LivingBuildingFramework.pdb
 K:\SteamLibrary\steamapps\common\RimWorld\Mods\LivingBuildingFramework\1.5\Assemblies\LivingBuildingFramework.dll
 K:\SteamLibrary\steamapps\common\RimWorld\Mods\LivingBuildingFramework\1.5\Assemblies\LivingBuildingFramework.pdb
+K:\SteamLibrary\steamapps\common\RimWorld\Mods\LivingBuildingFramework\1.6\Assemblies\LivingBuildingFramework.dll
+K:\SteamLibrary\steamapps\common\RimWorld\Mods\LivingBuildingFramework\1.6\Assemblies\LivingBuildingFramework.pdb

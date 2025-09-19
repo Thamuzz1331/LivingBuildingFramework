@@ -15,6 +15,7 @@ namespace RimWorld
     {
         int curTick = 0;
         public Dictionary<String, BuildingBody> bodies = new Dictionary<String, BuildingBody>();
+        public static String defaultBodyId = "Default";
 
         public MapCompBuildingTracker(Map map) : base(map)
         {
@@ -29,7 +30,6 @@ namespace RimWorld
 
         public void RegisterCore(CompBuildingCore core)
         {
-//            Log.Message("Registering " + core.bodyId);
             BuildingBody body = bodies.TryGetValue(core.bodyId);
             if (body == null)
             {
@@ -41,7 +41,6 @@ namespace RimWorld
 
         public void Register(CompBuildingBodyPart comp)
         {
-//            Log.Message("Registering Part " + comp.bodyId);
             BuildingBody body = bodies.TryGetValue(comp.bodyId, null);
             if (body == null)
             {
@@ -91,6 +90,17 @@ namespace RimWorld
             {
                 body.TerminateBody(mode, previousMap);
                 this.bodies.Remove(bodyId);
+            }
+        }
+
+        public void RepairPulse()
+        {
+            foreach (String key in this.bodies.Keys)
+            {
+                if (key != "NA")
+                {
+                    this.bodies[key].heart.RepairAdjacent();
+                }
             }
         }
 

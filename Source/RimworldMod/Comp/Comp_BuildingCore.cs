@@ -76,7 +76,7 @@ namespace RimWorld
             }
             foreach(BuildingGene g in genes)
             {
-                g.PostSpawnSetup(respawningAfterLoad);
+                g.PostSpawnSetup(respawningAfterLoad, this);
             }
         }
 
